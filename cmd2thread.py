@@ -19,7 +19,7 @@ from subprocess import Popen, PIPE
 import json
 import threading
 from threading import Thread
-kombu import Queue
+from kombu import Queue
 
 class CmdToThread(object):
     
