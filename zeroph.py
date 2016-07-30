@@ -107,7 +107,8 @@ class ZeroPh(object):
         try:
             cmd= Config.get("Cmd", method)
         except:
-            print(str(timenow())+' ZeroPh() Warning | cdm does NOT exist: ' + str(cmd))
+            print(str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method))
+            cmd=str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method)
         if self.verbose:
             print(str(timenow())+' v() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
