@@ -18,9 +18,9 @@ import subprocess
 from subprocess import Popen, PIPE
 import threading
 import Queue
-import ConfigParser
+import configparser
 # load configs
-Config = ConfigParser.ConfigParser()
+Config = configParser.ConfigParser()
 Config.read("config.ini")
 Config.sections()
 _HOST=Config["Default"]['Host']
