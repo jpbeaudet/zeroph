@@ -47,7 +47,7 @@ class CmdToThread(object):
 
         socket.bind(self.host+':'+self.port)
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(port))
+            print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(self.port))
             
         while True:
             msg = socket.recv()
