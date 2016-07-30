@@ -68,8 +68,8 @@ class CmdToThread(object):
         #cmd =[]
         #cmd.append(_type)
         #cmd.append(_file)
-        s =" "
-        cmd = s.join((_type,",", _file))
+        s =","
+        cmd = s.join((_type,_file))
         for arg in _cmd:
             if arg != ",":
                 cmd= cmd+","
