@@ -19,6 +19,8 @@ from subprocess import Popen, PIPE
 import threading
 import Queue
 import ConfigParser
+# load configs
+Config = ConfigParser.ConfigParser()
 
 class CmdToThread(object):
     
@@ -30,13 +32,12 @@ class CmdToThread(object):
         Start the server. Listen for cmd call
         
         """
-        # load configs
-        config = ConfigParser.ConfigParser()
         # server
-        port = '5555'
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        socket.bind('tcp://127.0.0.1'+':' + config['Default']['Port'])
+        host=ConfigSectionMap('Default')['Host']
+        port=ConfigSectionMap('Default')['Port']
+        socket.bind(host+':'+port)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(port))
             
@@ -59,12 +60,13 @@ class CmdToThread(object):
         @rtype: {} get the rsponse form the server which should be stdout of the called process
         
         """
-        # load configs
-        config = ConfigParser.ConfigParser()
+
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        socket.connect(config['Default']['Host']+':'+config['Default']['Port'])
+        host=ConfigSectionMap('Default')['Host']
+        port=ConfigSectionMap('Default')['Port']
+        socket.connect(host+':'+port)
         
         s =","
         cmd = s.join((_type,_file))
@@ -93,13 +95,13 @@ class CmdToThread(object):
         @rtype: {} get the rsponse form the server which should be stdout of the called process
         
         """
-        # load configs
-        config = ConfigParser.ConfigParser()
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        socket.connect(config['Default']['Host']+':'+config['Default']['Port'])
-        cmd= config['Cmd'][method]
+        host=ConfigSectionMap('Default')['Host']
+        port=ConfigSectionMap('Default')['Port']
+        socket.connect(host+':'+port)
+        cmd= ConfigSectionMap('Cmd')[method]
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
@@ -138,7 +140,20 @@ def enthread(target, args):
     t = threading.Thread(target=wrapper)
     t.start()
     return q
-    
+
+def ConfigSectionMap(section):
+    dict1 = {}
+    options = Config.options(section)
+    for option in options:
+        try:
+            dict1[option] = Config.get(section, option)
+            if dict1[option] == -1:
+                DebugPrint("skip: %s" % option)
+        except:
+            print("exception on %s!" % option)
+            dict1[option] = None
+    return dict1
+
 def timenow():
     return datetime.datetime.now().time()
     
