@@ -67,7 +67,7 @@ class CmdToThread(object):
                 #thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
                 # Start a new Thread
                 #thread1.start()
-                q1 = enthread(cmd, (msg, verbose=self.verbose))
+                q1 = enthread(cmd, (msg, self.verbose))
                 #print "Exiting Main Thread"
                 
                 #response = thread.start_new_thread(self.cmd, (msg, ))
