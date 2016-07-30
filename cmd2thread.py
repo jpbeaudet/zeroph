@@ -21,7 +21,7 @@ import Queue
 import Configparser
 
 # load configs
-Config = configParser.ConfigParser()
+Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 section = Config.sections()
 _HOST=section['Host']
