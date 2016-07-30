@@ -23,16 +23,16 @@ import ConfigParser
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 Config.sections()
-
+_HOST=Config["Default"]['Host']
+_PORT=Config["Default"]['Port']
 class CmdToThread(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
         #self.host=ConfigSectionMap("Default")["Host"]
         #self.port=ConfigSectionMap("Default")["Port"]
-        self.default=Config["Default"]
-        self.host=self.default.get("Host")
-        self.port=self.default.get("Port")
+        self.host=_HOST
+        self.port=_PORT
         
     def run_server(self):
         """
