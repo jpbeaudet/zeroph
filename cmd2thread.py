@@ -36,13 +36,7 @@ class cmdThread(threading.Thread):
             print(str(timenow())+' cmdThread() INFO | result: ' + str(result))
         # Free lock to release next thread
         threadLock.release()
-        
-        port = '5555'
-        context = zmq.Context()
-        socket = context.socket(zmq.REP)
-        socket.bind('tcp://127.0.0.1:' + port)
-        socket.send(str(result))
-        return True
+        return result
 
 class CmdToThread(object):
     
@@ -68,14 +62,17 @@ class CmdToThread(object):
                 # Create two threads as follows
                 #try:
                 # Create a new thread
+                q = queue.Queue()
+                
                 thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
-
+                q.put(thread1)
                 # Start a new Thread
                 thread1.start()
 
                 print "Exiting Main Thread"
+                
                 #response = thread.start_new_thread(self.cmd, (msg, ))
-                #socket.send(str(thread1))
+                socket.send(str(q.get()))
                 #except:
                     #print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
