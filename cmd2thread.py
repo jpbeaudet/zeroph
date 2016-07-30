@@ -32,6 +32,8 @@ class cmdThread(threading.Thread):
         # Get lock to synchronize threads
         threadLock.acquire()
         result = cmd(self.cmd, self.verbose)
+        if self.verbose:
+            print(str(timenow())+' cmdThread() INFO | result: ' + str(result))
         # Free lock to release next thread
         threadLock.release()
         return result
