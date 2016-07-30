@@ -65,18 +65,21 @@ class CmdToThread(object):
         socket.connect('tcp://127.0.0.1:5555')
         
         #cmd = sum([_type, _file], _cmd.split(" "))
-        cmd =[]
-        cmd.append(_type)
-        cmd.append(_file)
+        #cmd =[]
+        #cmd.append(_type)
+        #cmd.append(_file)
+        s =" "
+        cmd = s.join(_type, _file)
         for arg in _cmd:
             if self.verbose:
                 print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
-            cmd.append(arg)
+            #cmd.append(arg)
+            cmd = cmd + " " +arg
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
-        data = json.dumps(cmd)
-        socket.send(data)
+        #data = json.dumps(cmd)
+        socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
@@ -90,7 +93,8 @@ class CmdToThread(object):
         @rtype: {} return value
         
         """
-        query= json.loads(cmd)
+        #query= json.loads(cmd)
+        query= cmd.split(" ")
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
         process = Popen(query, stdout=PIPE, stderr=PIPE)
