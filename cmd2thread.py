@@ -110,7 +110,7 @@ def main():
     cmd2thread = CmdToThread(verbose)
     
     if args._type and args._file and args.cmd:
-        cmd2thread.send(_type, _file, _cmd)
+        cmd2thread.send(args._type, args._file, args.cmd)
     elif args.start:
         cmd2thread.run_server()
     else:
