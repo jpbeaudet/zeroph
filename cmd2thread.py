@@ -42,7 +42,7 @@ class CmdToThread(object):
                 # Create two threads as follows
                 try:
                     response = thread.start_new_thread(self.cmd, (msg, ))
-                    socket.send(response)
+                    socket.send(str(response))
                 except:
                     print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
