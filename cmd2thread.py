@@ -20,16 +20,18 @@ import threading
 threadLock = threading.Lock()
 
 class cmdThread(threading.Thread):
-    def __init__(self, threadID, name, cmd):
+    def __init__(self, threadID, name, cmd, verbose=False):
         threading.Thread.__init__(self)
         self.threadID = threadID
         self.name = name
         self.cmd = cmd
+        self.verbose = verbose
+        
     def run(self):
         print "Starting " + self.name
         # Get lock to synchronize threads
         threadLock.acquire()
-        result = cmd(self.cmd)
+        result = cmd(self.cmd, self.verbose)
         # Free lock to release next thread
         threadLock.release()
         return result
@@ -58,7 +60,7 @@ class CmdToThread(object):
                 # Create two threads as follows
                 #try:
                 # Create a new thread
-                thread1 = cmdThread(1, str(msg.split(",")[1]), msg)
+                thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
 
                 # Start a new Thread
                 thread1.start()
@@ -105,7 +107,7 @@ class CmdToThread(object):
             print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
         
         
-def cmd(cmd):
+def cmd(cmd, verbose):
     """
     Run the actual command in thread
         
@@ -115,17 +117,17 @@ def cmd(cmd):
     """
 
 
-    if self.verbose:
+    if verbose:
         print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
     query= cmd.split(",")
-    if self.verbose:
+    if verbose:
         print(str(timenow())+' CmdToThread() INFO | query : ' + str(query))
     process = Popen(query, stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     if stderr:
         print(str(timenow())+' CmdToThread() WARNING | cmd returned error: ' + str(stderr))
     else:
-        if self.verbose:
+        if verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd returned stdout: ' + str(stdout))
         return stdout
             
