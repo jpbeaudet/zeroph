@@ -17,6 +17,7 @@ import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import threading
+import Queue
 threadLock = threading.Lock()
 
 class cmdThread(threading.Thread):
@@ -62,7 +63,7 @@ class CmdToThread(object):
                 # Create two threads as follows
                 #try:
                 # Create a new thread
-                q = queue.Queue()
+                q = Queue.Queue()
                 
                 thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
                 q.put(thread1)
