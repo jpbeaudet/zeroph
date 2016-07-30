@@ -63,8 +63,8 @@ class CmdToThread(object):
         socket = context.socket(zmq.REQ)
         socket.connect('tcp://127.0.0.1:5555')
         
-        #cmd = sum([_type, _file], _cmd.split(" "))
-        cmd = sum([_type, _file], _cmd)
+        cmd = sum([_type, _file], _cmd.split(" "))
+        #cmd = sum([_type, _file], _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
