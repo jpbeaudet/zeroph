@@ -72,10 +72,11 @@ class CmdToThread(object):
         cmd = s.join(("[",_type, _file))
         for arg in _cmd:
             if arg != ",":
+                cmd= cmd+", "
                 if self.verbose:
                     print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
                 #cmd.append(arg)
-                cmd = cmd + " " +arg.replace("[","").replace("]","") +", "
+                cmd = cmd + " " +arg.replace("[","").replace("]","") 
         cmd= cmd+ "]"
         #cmd = sum(cmd, _cmd)
         if self.verbose:
