@@ -18,13 +18,15 @@ import subprocess
 from subprocess import Popen, PIPE
 import threading
 import Queue
-import configparser
+import Configparser
+
 # load configs
 Config = configParser.ConfigParser()
 Config.read("config.ini")
-Config.sections()
-_HOST=Config["Default"]['Host']
-_PORT=Config["Default"]['Port']
+section = Config.sections()
+_HOST=section['Host']
+_PORT=section['Port']
+
 class CmdToThread(object):
     
     def __init__(self, verbose):
