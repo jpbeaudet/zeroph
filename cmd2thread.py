@@ -68,8 +68,8 @@ class CmdToThread(object):
         cmd =[]
         cmd.append(_type)
         cmd.append(_file)
-        for arg in cmd
-        cmd.append(arg)
+        for arg in cmd:
+            cmd.append(arg)
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
