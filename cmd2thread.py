@@ -69,13 +69,13 @@ class CmdToThread(object):
         #cmd.append(_type)
         #cmd.append(_file)
         s =" "
-        cmd = s.join((_type, _file))
-        for arg in _cmd:
+        cmd = s.join(("[",_type, _file))
+        for arg in json.loads(_cmd):
             if self.verbose:
                 print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
             #cmd.append(arg)
             cmd = cmd + " " +arg
-        cmd= cmd.replace("[","").replace("]","").replace(",","")
+        cmd= cmd+ "]"
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
@@ -126,6 +126,7 @@ def main():
     
     if args._type and args._file and args.cmd:
         cmd2thread.send(args._type, args._file, args.cmd)
+        print(str(timenow())+' CmdToThread() INFO | args.cmd: '+args.cmd)
     elif args.start:
         cmd2thread.run_server()
     else:
