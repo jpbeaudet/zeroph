@@ -27,6 +27,7 @@ section = Config.sections()
 _HOST=Config.get("Default",'Host')
 _PORT=Config.get("Default",'Port')
 
+
 class CmdToThread(object):
     
     def __init__(self, verbose):
@@ -105,7 +106,10 @@ class CmdToThread(object):
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
         socket.connect(self.host+':'+self.port)
-        cmd= Config["Cmd"].get(method)
+        try:
+            cmd= Config.get("Cmd", method)
+        except:
+            print(str(timenow())+' CmdToThread() Warning | cdm does NOT exist: ' + str(cmd))
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
