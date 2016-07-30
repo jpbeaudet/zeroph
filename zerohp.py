@@ -28,7 +28,7 @@ _HOST=Config.get("Default",'Host')
 _PORT=Config.get("Default",'Port')
 
 
-class CmdToThread(object):
+class ZeroHp(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
@@ -177,15 +177,14 @@ def main():
     verbose = False
     if args.verbose:
         verbose = True
-        
-    cmd2thread = CmdToThread(verbose)
+    zerohp = ZeroHp(verbose)
     
     if args._type and args._file and args.cmd:
-        cmd2thread.send(args._type, args._file, args.cmd)
+        zerohp.send(args._type, args._file, args.cmd)
     elif args.start:
-        cmd2thread.run_server()
+        zerohp.run_server()
     elif args.name:
-        cmd2thread.call(args.name)
+        zerohp.call(args.name)
     else:
         print(str(timenow())+' CmdToThread() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
