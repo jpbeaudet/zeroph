@@ -3,7 +3,7 @@
 """
 Author : Jean-Philippe Beaudet@s3r3nity
 
-Server to run python commend in threads
+Server to run python command in threads
 
 Wrapper to start any new comand in python threads
 ​
@@ -63,7 +63,8 @@ class CmdToThread(object):
         socket = context.socket(zmq.REQ)
         socket.connect('tcp://127.0.0.1:5555')
         
-        cmd = sum([_type, _file], _cmd.split(" "))
+        #cmd = sum([_type, _file], _cmd.split(" "))
+        cmd = sum([_type, _file], _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
@@ -99,7 +100,7 @@ def main():
     parser.add_argument('-v', '--verbose', action='store_true', help='Flag to verbose')
     parser.add_argument('-t', '--_type', help='{string} type of file to be called, ex: python , node, sh, ./')
     parser.add_argument('-f', '--_file', help='{string} filename to be called, ex: example.py, do.sh, index.js')
-    parser.add_argument('-c', '--cmd', help='{string} cmd args and parameters')
+    parser.add_argument('-c', '--cmd', nargs='+', help='{list} cmd args and parameters')
     parser.add_argument('-s', '--start', action='store_true', help='start the server')
     args = parser.parse_args()
     verbose = False
