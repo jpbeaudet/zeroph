@@ -23,6 +23,7 @@ import ConfigParser
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 Config.sections()
+Config.options()
 
 class CmdToThread(object):
     
