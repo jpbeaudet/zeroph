@@ -69,7 +69,7 @@ class CmdToThread(object):
 
                 print "Exiting Main Thread"
                 #response = thread.start_new_thread(self.cmd, (msg, ))
-                socket.send(str(thread1.get()))
+                socket.send(str(thread1))
                 #except:
                     #print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
