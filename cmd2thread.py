@@ -68,12 +68,13 @@ class CmdToThread(object):
         cmd =[]
         cmd.append(_type)
         cmd.append(_file)
-        for arg in cmd:
+        for arg in _cmd:
             cmd.append(arg)
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
-        socket.send(json.dumps(cmd))
+        data = json.dumps(cmd)
+        socket.send(data)
         msg = socket.recv()
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
