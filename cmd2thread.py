@@ -24,8 +24,8 @@ import ConfigParser
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 section = Config.sections()
-_HOST=section[0]['Host']
-_PORT=section[0]['Port']
+_HOST=Config.get("Default",'Host')
+_PORT=Config.get("Default",'Port')
 
 class CmdToThread(object):
     
