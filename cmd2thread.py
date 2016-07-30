@@ -30,11 +30,13 @@ class CmdToThread(object):
         Start the server. Listen for cmd call
         
         """
+        # load configs
+        config = configparser.ConfigParser()
         # server
         port = '5555'
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        socket.bind('tcp://127.0.0.1:' + port)
+        socket.bind('tcp://127.0.0.1'+':' + config['Default']['Port'])
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(port))
             
@@ -57,10 +59,12 @@ class CmdToThread(object):
         @rtype: {} get the rsponse form the server which should be stdout of the called process
         
         """
+        # load configs
+        config = configparser.ConfigParser()
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        socket.connect('tcp://127.0.0.1:5555')
+        socket.connect(config['Default']['Host']+':'+config['Default']['Port'])
         
         s =","
         cmd = s.join((_type,_file))
@@ -78,7 +82,30 @@ class CmdToThread(object):
         msg = socket.recv()
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
+            
+    def call(self, method):
+        """
+        Send a cmd to the server to be run in a thread
         
+        @params: {str} _type: type of comand ex: python, node, sh
+        @params: {str} _file: filename to be called
+        @params: {str} _cmd: the actual cmd and args that will be apllied to the cmd
+        @rtype: {} get the rsponse form the server which should be stdout of the called process
+        
+        """
+        # load configs
+        config = configparser.ConfigParser()
+        # client
+        context = zmq.Context()
+        socket = context.socket(zmq.REQ)
+        socket.connect(config['Default']['Host']+':'+config['Default']['Port'])
+        cmd= config['Cmd'][method]
+        if self.verbose:
+            print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
+        socket.send(cmd)
+        msg = socket.recv()
+        if self.verbose:
+            print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))        
         
 def cmd(cmd, verbose):
     """
@@ -122,6 +149,7 @@ def main():
     parser.add_argument('-f', '--_file', help='{string} filename to be called, ex: example.py, do.sh, index.js')
     parser.add_argument('-c', '--cmd', nargs='+', help='{list} cmd args and parameters')
     parser.add_argument('-s', '--start', action='store_true', help='start the server')
+    parser.add_argument('-n', '--name',  help='{string} Name of the method to fetch in config')
     args = parser.parse_args()
     verbose = False
     if args.verbose:
@@ -133,6 +161,8 @@ def main():
         cmd2thread.send(args._type, args._file, args.cmd)
     elif args.start:
         cmd2thread.run_server()
+    elif args.name:
+        cmd2thread.call(args.name)
     else:
         print(str(timenow())+' CmdToThread() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
