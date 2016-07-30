@@ -17,6 +17,7 @@ import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import threading
+threadLock = threading.Lock()
 
 class cmdThread(threading.Thread):
     def __init__(self, threadID, name, cmd):
