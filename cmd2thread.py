@@ -18,26 +18,7 @@ import subprocess
 from subprocess import Popen, PIPE
 import threading
 import Queue
-threadLock = threading.Lock()
 
-class cmdThread(threading.Thread):
-    def __init__(self, threadID, name, cmd, verbose=False):
-        threading.Thread.__init__(self)
-        self.threadID = threadID
-        self.name = name
-        self.cmd = cmd
-        self.verbose = verbose
-        
-    def run(self):
-        print "Starting " + self.name
-        # Get lock to synchronize threads
-        threadLock.acquire()
-        result = cmd(self.cmd, self.verbose)
-        if self.verbose:
-            print(str(timenow())+' cmdThread() INFO | result: ' + str(result))
-        # Free lock to release next thread
-        threadLock.release()
-        return result
 
 class CmdToThread(object):
     
@@ -61,20 +42,8 @@ class CmdToThread(object):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                #try:
-                # Create a new thread
-                
-                #thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
-                # Start a new Thread
-                #thread1.start()
                 q1 = enthread(cmd, (msg, self.verbose))
-                #print "Exiting Main Thread"
-                
-                #response = thread.start_new_thread(self.cmd, (msg, ))
                 socket.send(str(q1.get()))
-                #except:
-                    #print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
-                    #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
             else:
                 print(str(timenow())+' CmdToThread() WARNING | Error: cmd was not converted to list ')
                 
@@ -119,7 +88,6 @@ def cmd(cmd, verbose):
     @rtype: {} return value
         
     """
-
 
     if verbose:
         print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
