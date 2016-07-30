@@ -76,7 +76,7 @@ class CmdToThread(object):
                 if self.verbose:
                     print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
                 #cmd.append(arg)
-                cmd = cmd + " " +arg.replace("[","").replace("]","") 
+                cmd = cmd + arg.replace("[","").replace("]","") 
         #cmd= cmd+ " ]"
         #cmd = sum(cmd, _cmd)
         if self.verbose:
