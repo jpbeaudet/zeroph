@@ -7,23 +7,40 @@ Zero-ProcessHandler is a event driven process handler managing command line tool
 ##### Start the server:
 
 ```
-python cmd2thread.py -v -s
+python zeroph.py.py -v -s
 
 ```
 
 ##### Launch a process :
 
 ```
-python cmd2thread.py -v -t python -f test.py -c ["-t" , "hello world"]
+python zeroph.py -v -t python -f test.py -c ["-t" , "hello world"]
 
 ```
 
+#### config.ini
+```
+[Default]
+Port: 5555
+Host: tcp://127.0.0.1
+
+[Cmd]
+Test : python cmd2thread.py -v -t python -f test.py -c ["-t" , "hello world"]
+
+```
+
+#### Then:
+```
+python zeroph.py -n Test
+
+```
+
+##### You can add new cmd in [Cmd] section at will and then call them in threads with a word
+Then the cmd can be adjusted at will without having to go over the whole code and also lunch separate process in threads
+
 ### TODOS: 
 
-- Built a handler that lunch and listen via zeromq command line tool
 - Find a way to send rcv other type of dasta than string
-- build a config file to easyly bind command to a namespace
-- design the wrapper to launch via cmd2thread the bound command via name passing
 - design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
 - make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
 - make a global onFail, onError, onDisconnect, onConnRefused mandatory strategy for the handler
