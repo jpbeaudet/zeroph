@@ -69,7 +69,7 @@ class CmdToThread(object):
         #cmd.append(_type)
         #cmd.append(_file)
         s =" "
-        cmd = s.join(_type, _file)
+        cmd = s.join((_type, _file))
         for arg in _cmd:
             if self.verbose:
                 print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
