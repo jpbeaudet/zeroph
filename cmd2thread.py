@@ -18,7 +18,7 @@ import subprocess
 from subprocess import Popen, PIPE
 import threading
 import Queue
-
+import ConfigParser
 
 class CmdToThread(object):
     
