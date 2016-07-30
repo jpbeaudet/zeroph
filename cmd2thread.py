@@ -96,10 +96,11 @@ class CmdToThread(object):
         @rtype: {} return value
         
         """
-        query= json.loads(cmd)
+
         #query= cmd.split(" ")
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
+        query= json.loads(cmd)
         process = Popen(query, stdout=PIPE, stderr=PIPE)
         stdout, stderr = process.communicate()
         if stderr:
