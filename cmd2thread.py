@@ -55,19 +55,19 @@ class CmdToThread(object):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                try:
-                    # Create a new thread
-                    thread1 = myThread(1, str(msg.plit(",")[1]), msg)
+                #try:
+                # Create a new thread
+                thread1 = myThread(1, str(msg.plit(",")[1]), msg)
 
-                    # Start a new Thread
-                    thread1.start()
+                # Start a new Thread
+                thread1.start()
 
-                    print "Exiting Main Thread"
-                    #response = thread.start_new_thread(self.cmd, (msg, ))
-                    socket.send(str(thread1.get()))
-                except:
+                print "Exiting Main Thread"
+                #response = thread.start_new_thread(self.cmd, (msg, ))
+                socket.send(str(thread1.get()))
+                #except:
                     print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
-                    socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
+                    #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
             else:
                 print(str(timenow())+' CmdToThread() WARNING | Error: cmd was not converted to list ')
                 
