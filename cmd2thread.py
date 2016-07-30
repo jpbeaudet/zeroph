@@ -75,6 +75,7 @@ class CmdToThread(object):
                 print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
             #cmd.append(arg)
             cmd = cmd + " " +arg
+        cmd= cmd.replace("[","").replace("]","") 
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
