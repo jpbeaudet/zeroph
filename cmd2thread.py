@@ -28,8 +28,8 @@ class CmdToThread(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
-        self.host=ConfigSectionMap("Default")['Host']
-        self.port=ConfigSectionMap("Default")['Port']
+        self.host=ConfigSectionMap("Default")["Host"]
+        self.port=ConfigSectionMap("Default")["Port"]
         
     def run_server(self):
         """
