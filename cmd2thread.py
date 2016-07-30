@@ -35,8 +35,8 @@ class CmdToThread(object):
         # server
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        host=ConfigSectionMap('Default')['Host']
-        port=ConfigSectionMap('Default')['Port']
+        host=ConfigSectionMap("Default")['Host']
+        port=ConfigSectionMap("Default")['Port']
         socket.bind(host+':'+port)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(port))
@@ -64,8 +64,8 @@ class CmdToThread(object):
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        host=ConfigSectionMap('Default')['Host']
-        port=ConfigSectionMap('Default')['Port']
+        host=ConfigSectionMap("Default")['Host']
+        port=ConfigSectionMap("Default")['Port']
         socket.connect(host+':'+port)
         
         s =","
@@ -98,8 +98,8 @@ class CmdToThread(object):
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        host=ConfigSectionMap('Default')['Host']
-        port=ConfigSectionMap('Default')['Port']
+        host=ConfigSectionMap("Default")['Host']
+        port=ConfigSectionMap("Default")['Port']
         socket.connect(host+':'+port)
         cmd= ConfigSectionMap('Cmd')[method]
         if self.verbose:
