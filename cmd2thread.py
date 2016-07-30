@@ -63,17 +63,15 @@ class CmdToThread(object):
                 # Create two threads as follows
                 #try:
                 # Create a new thread
-                q = Queue.Queue()
                 
-                thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
-                q.put(thread1)
+                #thread1 = cmdThread(1, str(msg.split(",")[1]), msg, verbose=self.verbose)
                 # Start a new Thread
-                thread1.start()
-
-                print "Exiting Main Thread"
+                #thread1.start()
+                q1 = enthread(cmd, (msg, verbose=self.verbose))
+                #print "Exiting Main Thread"
                 
                 #response = thread.start_new_thread(self.cmd, (msg, ))
-                socket.send(str(q.get()))
+                socket.send(str(q1.get()))
                 #except:
                     #print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
@@ -136,7 +134,16 @@ def cmd(cmd, verbose):
         if verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd returned stdout: ' + str(stdout))
         return stdout
-            
+        
+        
+def enthread(target, args):
+    q = Queue.Queue()
+    def wrapper():
+        q.put(target(*args))
+    t = threading.Thread(target=wrapper)
+    t.start()
+    return q
+    
 def timenow():
     return datetime.datetime.now().time()
     
