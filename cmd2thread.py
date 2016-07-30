@@ -31,7 +31,7 @@ class CmdToThread(object):
         
         """
         # load configs
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         # server
         port = '5555'
         context = zmq.Context()
@@ -60,7 +60,7 @@ class CmdToThread(object):
         
         """
         # load configs
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
@@ -94,7 +94,7 @@ class CmdToThread(object):
         
         """
         # load configs
-        config = configparser.ConfigParser()
+        config = ConfigParser.ConfigParser()
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
