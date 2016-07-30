@@ -69,7 +69,7 @@ class CmdToThread(object):
         #cmd.append(_type)
         #cmd.append(_file)
         s =" "
-        cmd = s.join(("[ ",_type,", ", _file))
+        cmd = s.join((_type,", ", _file))
         for arg in _cmd:
             if arg != ",":
                 cmd= cmd+", "
@@ -77,7 +77,7 @@ class CmdToThread(object):
                     print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
                 #cmd.append(arg)
                 cmd = cmd + " " +arg.replace("[","").replace("]","") 
-        cmd= cmd+ " ]"
+        #cmd= cmd+ " ]"
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
@@ -100,7 +100,8 @@ class CmdToThread(object):
         #query= cmd.split(" ")
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
-        query= json.loads(cmd)
+        #query= json.loads(cmd)
+        query= cmd.split(",")
         process = Popen(query, stdout=PIPE, stderr=PIPE)
         stdout, stderr = process.communicate()
         if stderr:
