@@ -57,7 +57,7 @@ class CmdToThread(object):
                 # Create two threads as follows
                 try:
                     # Create a new thread
-                    thread1 = myThread(1, str(msg.plit(",")[1], msg)
+                    thread1 = myThread(1, str(msg.plit(",")[1]), msg)
 
                     # Start a new Thread
                     thread1.start()
