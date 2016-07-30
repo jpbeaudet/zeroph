@@ -26,6 +26,8 @@ class CmdToThread(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
+        self.host=ConfigSectionMap("Default")['Host']
+        self.port=ConfigSectionMap("Default")['Port']
         
     def run_server(self):
         """
@@ -35,9 +37,8 @@ class CmdToThread(object):
         # server
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-        host=ConfigSectionMap("Default")['Host']
-        port=ConfigSectionMap("Default")['Port']
-        socket.bind(host+':'+port)
+
+        socket.bind(self.host+':'+self.port)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(port))
             
@@ -64,9 +65,7 @@ class CmdToThread(object):
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        host=ConfigSectionMap("Default")['Host']
-        port=ConfigSectionMap("Default")['Port']
-        socket.connect(host+':'+port)
+        socket.connect(self.host+':'+self.port)
         
         s =","
         cmd = s.join((_type,_file))
@@ -98,10 +97,8 @@ class CmdToThread(object):
         # client
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
-        host=ConfigSectionMap("Default")['Host']
-        port=ConfigSectionMap("Default")['Port']
-        socket.connect(host+':'+port)
-        cmd= ConfigSectionMap('Cmd')[method]
+        socket.connect(self.host+':'+self.port)
+        cmd= ConfigSectionMap("Cmd")[method]
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
