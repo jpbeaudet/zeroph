@@ -16,6 +16,7 @@ import time
 import datetime
 import subprocess
 from subprocess import Popen, PIPE
+import json
 
 class CmdToThread(object):
     
@@ -37,7 +38,7 @@ class CmdToThread(object):
             
         while True:
             msg = socket.recv()
-            if isinstance(msg, list):
+            if isinstance(msg, str):
                 # Create two threads as follows
                 try:
                     response = thread.start_new_thread(self.cmd, (msg))
@@ -67,11 +68,12 @@ class CmdToThread(object):
         cmd =[]
         cmd.append(_type)
         cmd.append(_file)
-        cmd= cmd+_cmd
+        for arg in cmd
+        cmd.append(arg)
         #cmd = sum(cmd, _cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
-        socket.send(cmd)
+        socket.send(json.dumps(cmd))
         msg = socket.recv()
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
@@ -85,9 +87,10 @@ class CmdToThread(object):
         @rtype: {} return value
         
         """
+        query= json.loads(cmd)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
-        process = Popen(cmd, stdout=PIPE, stderr=PIPE)
+        process = Popen(query, stdout=PIPE, stderr=PIPE)
         stdout, stderr = process.communicate()
         if stderr:
             print(str(timenow())+' CmdToThread() WARNING | cmd returned error: ' + str(stderr))
