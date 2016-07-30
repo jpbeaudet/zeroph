@@ -74,7 +74,7 @@ class CmdToThread(object):
             if arg != ",":
                 cmd= cmd+","
                 if self.verbose:
-                    print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
+                    print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg)) 
                 #cmd.append(arg)
                 cmd = cmd + arg.replace("[","").replace("]","") 
         #cmd= cmd+ " ]"
