@@ -66,7 +66,7 @@ class CmdToThread(object):
                 #response = thread.start_new_thread(self.cmd, (msg, ))
                 socket.send(str(thread1.get()))
                 #except:
-                    print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
+                    #print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     #socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
             else:
                 print(str(timenow())+' CmdToThread() WARNING | Error: cmd was not converted to list ')
