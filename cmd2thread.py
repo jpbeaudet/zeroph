@@ -75,7 +75,7 @@ class CmdToThread(object):
                 if self.verbose:
                     print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg))
                 #cmd.append(arg)
-                cmd = cmd + " " +arg.replace("[","").replace("]","")
+                cmd = cmd + " " +arg.replace("[","").replace("]","") +", "
         cmd= cmd+ "]"
         #cmd = sum(cmd, _cmd)
         if self.verbose:
@@ -95,8 +95,8 @@ class CmdToThread(object):
         @rtype: {} return value
         
         """
-        #query= json.loads(cmd)
-        query= cmd.split(" ")
+        query= json.loads(cmd)
+        #query= cmd.split(" ")
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
         process = Popen(query, stdout=PIPE, stderr=PIPE)
