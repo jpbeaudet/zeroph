@@ -21,6 +21,8 @@ import Queue
 import ConfigParser
 # load configs
 Config = ConfigParser.ConfigParser()
+Config.read("config.ini")
+Config.sections()
 
 class CmdToThread(object):
     
