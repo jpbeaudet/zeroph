@@ -28,7 +28,7 @@ _HOST=Config.get("Default",'Host')
 _PORT=Config.get("Default",'Port')
 
 
-class ZeroHp(object):
+class ZeroPh(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
@@ -48,7 +48,7 @@ class ZeroHp(object):
 
         socket.bind(self.host+':'+self.port)
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | socket now listen on port: ' + str(self.port))
+            print(str(timenow())+' ZeroPh() INFO | socket now listen on port: ' + str(self.port))
             
         while True:
             msg = socket.recv()
@@ -57,7 +57,7 @@ class ZeroHp(object):
                 q1 = enthread(cmd, (msg, self.verbose))
                 socket.send(str(q1.get()))
             else:
-                print(str(timenow())+' CmdToThread() WARNING | Error: cmd was not converted to list ')
+                print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
                 
     def send(self, _type, _file, _cmd):
         """
@@ -81,16 +81,16 @@ class ZeroHp(object):
             if arg != ",":
                 cmd= cmd+","
                 if self.verbose:
-                    print(str(timenow())+' CmdToThread() INFO | arg in _cmd: ' + str(arg)) 
+                    print(str(timenow())+' ZeroPh() INFO | arg in _cmd: ' + str(arg)) 
 
                 cmd = cmd + arg.replace("[","").replace("]","") 
 
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
+            print(str(timenow())+' ZeroPh() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))
+            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))
             
     def call(self, method):
         """
@@ -109,13 +109,13 @@ class ZeroHp(object):
         try:
             cmd= Config.get("Cmd", method)
         except:
-            print(str(timenow())+' CmdToThread() Warning | cdm does NOT exist: ' + str(cmd))
+            print(str(timenow())+' ZeroPh() Warning | cdm does NOT exist: ' + str(cmd))
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
+            print(str(timenow())+' v() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
-            print(str(timenow())+' CmdToThread() INFO | server returned response: ' + str(msg))        
+            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))        
         
 def cmd(cmd, verbose):
     """
@@ -127,17 +127,17 @@ def cmd(cmd, verbose):
     """
 
     if verbose:
-        print(str(timenow())+' CmdToThread() INFO | Thread started for : ' + str(cmd))
+        print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd))
     query= cmd.split(",")
     if verbose:
-        print(str(timenow())+' CmdToThread() INFO | query : ' + str(query))
+        print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
     process = Popen(query, stdout=PIPE, stderr=PIPE)
     stdout, stderr = process.communicate()
     if stderr:
-        print(str(timenow())+' CmdToThread() WARNING | cmd returned error: ' + str(stderr))
+        print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
     else:
         if verbose:
-            print(str(timenow())+' CmdToThread() INFO | cmd returned stdout: ' + str(stdout))
+            print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
         return stdout
         
         
@@ -177,16 +177,16 @@ def main():
     verbose = False
     if args.verbose:
         verbose = True
-    zerohp = ZeroHp(verbose)
+    zeroph = ZeroPh(verbose)
     
     if args._type and args._file and args.cmd:
-        zerohp.send(args._type, args._file, args.cmd)
+        zeroph.send(args._type, args._file, args.cmd)
     elif args.start:
-        zerohp.run_server()
+        zeroph.run_server()
     elif args.name:
-        zerohp.call(args.name)
+        zeroph.call(args.name)
     else:
-        print(str(timenow())+' CmdToThread() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
+        print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
 if __name__ == "__main__":
     main()
