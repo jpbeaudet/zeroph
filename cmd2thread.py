@@ -18,7 +18,7 @@ import subprocess
 from subprocess import Popen, PIPE
 import threading
 
-class cmdThread (threading.Thread):
+class cmdThread(threading.Thread):
     def __init__(self, threadID, name, cmd):
         threading.Thread.__init__(self)
         self.threadID = threadID
@@ -57,7 +57,7 @@ class CmdToThread(object):
                 # Create two threads as follows
                 #try:
                 # Create a new thread
-                thread1 = myThread(1, str(msg.plit(",")[1]), msg)
+                thread1 = cmdThread(1, str(msg.plit(",")[1]), msg)
 
                 # Start a new Thread
                 thread1.start()
