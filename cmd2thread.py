@@ -30,8 +30,9 @@ class CmdToThread(object):
         self.verbose = verbose
         #self.host=ConfigSectionMap("Default")["Host"]
         #self.port=ConfigSectionMap("Default")["Port"]
-        self.host=Config["Default"].get("Host")
-        self.port=Config["Default"].get("Port")
+        self.default=Config["Default"]
+        self.host=self.default.get("Host")
+        self.port=self.default.get("Port")
         
     def run_server(self):
         """
