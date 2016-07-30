@@ -23,14 +23,15 @@ import ConfigParser
 Config = ConfigParser.ConfigParser()
 Config.read("config.ini")
 Config.sections()
-Config.options()
 
 class CmdToThread(object):
     
     def __init__(self, verbose):
         self.verbose = verbose
-        self.host=ConfigSectionMap("Default")["Host"]
-        self.port=ConfigSectionMap("Default")["Port"]
+        #self.host=ConfigSectionMap("Default")["Host"]
+        #self.port=ConfigSectionMap("Default")["Port"]
+        self.host=Config["Default"].get("Host")
+        self.port=Config["Default"].get("Port")
         
     def run_server(self):
         """
@@ -101,7 +102,7 @@ class CmdToThread(object):
         context = zmq.Context()
         socket = context.socket(zmq.REQ)
         socket.connect(self.host+':'+self.port)
-        cmd= ConfigSectionMap("Cmd")[method]
+        cmd= Config["Cmd"].get(method)
         if self.verbose:
             print(str(timenow())+' CmdToThread() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
