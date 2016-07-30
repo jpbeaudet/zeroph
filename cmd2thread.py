@@ -17,6 +17,8 @@ import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import json
+import threading
+from threading import Thread
 
 class CmdToThread(object):
     
@@ -42,7 +44,16 @@ class CmdToThread(object):
                 # Create two threads as follows
                 try:
                     #response = thread.start_new_thread(self.cmd, (msg, ))
-                    socket.send(thread.start_new_thread(self.cmd, (msg, )))
+                    queue = Queue.Queue()
+                    thread_ = threading.Thread(
+                        target=self.cmd,
+                        name= msg,
+                        args=[msg, queue],
+                        )
+                    thread_.start()
+                    thread_.join()
+                    response= queue.get()
+                    socket.send(str(response))
                 except:
                     print(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
                     socket.send(str(timenow())+' CmdToThread() WARNING | Error: unable to start thread ')
