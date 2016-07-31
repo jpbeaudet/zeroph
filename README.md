@@ -25,7 +25,13 @@ Port: 5555
 Host: tcp://127.0.0.1
 
 [Cmd]
-Test : python cmd2thread.py -v -t python -f test.py -c ["-t" , "hello world"]
+[Default]
+Port: 5555
+Host: tcp://127.0.0.1
+
+[Cmd]
+Test : python,test.py,-t,hello world
+
 
 ```
 
