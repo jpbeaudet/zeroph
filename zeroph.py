@@ -176,7 +176,7 @@ class ZeroPh(object):
                             CMD.append(command)
                     else:
                         CMD.append(cmds[1])
-                    CMD=["Test2"]
+                    CMD=["Test2","Test3"]
                     q1 = enthread(self.wait_cascade, (CMD))
                     #self.wait_cascade(CMD)
                     continue
