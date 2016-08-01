@@ -175,7 +175,7 @@ class ZeroPh(object):
                             print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
                         q1 = enthread(self.wait_cascade, cmds[1])
                     else:
-                        q1 = enthread(self.call, CMD)
+                        q2 = enthread(self.call, cmds[1])
                     #CMD=["Test2","Test3"]
                     #q1 = enthread(self.wait_cascade, CMD)
                     #self.wait_cascade(CMD)
