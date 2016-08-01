@@ -200,7 +200,7 @@ class ZeroPh(object):
         time.sleep(seconds)
         return self.call(command)
         
-    def wait_cascade(self, commands. _id):
+    def wait_cascade(self, commands, _id):
         """
         wait on a return value before calling next command. Here will
         go the onReturn, onError, strategy.
