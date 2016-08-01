@@ -19,7 +19,7 @@ class TestZmq(object):
     def __init__(self, verbose):
         self.verbose = verbose
         self.host="tcp://127.0.0.1"
-        self.port=5557
+        self.port='5557'
         
     def run_server(self):
         """
