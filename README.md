@@ -86,6 +86,7 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - json-rpc
 - webob
 - traceback
+- simplejson
 
 
 ### TODOS: 

@@ -43,7 +43,7 @@ def make_app(expr):
     __import__(module)
     module = sys.modules[module]
     obj = eval(expression, module.__dict__)
-    return JsonRpcApp(obj)
+    return json_rpc_app.JsonRpcApp(obj)
     
 if __name__ == '__main__':
     main()
