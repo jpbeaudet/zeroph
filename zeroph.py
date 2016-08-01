@@ -171,7 +171,7 @@ class ZeroPh(object):
                     q1 = enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
                     #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
-                elif isinstance(cmds[0], str):
+                elif isinstance(commands[x][0], str):
                     if commands[x][1].split(",") > 0:
                         if self.verbose:
                             print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
