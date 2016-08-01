@@ -22,7 +22,8 @@ def main(args=None):
         '-p', '--port', default='9999',
         help='Port to serve on (default 9999)')
     parser.add_option(
-        '-H', '--host', default='127.0.0.1',
+        #'-H', '--host', default='127.0.0.1',
+        '-H', '--host', default='0.0.0.0',
         help='Host to serve on (default localhost; 0.0.0.0 to make public)')
     if args is None:
         args = sys.argv[1:]
