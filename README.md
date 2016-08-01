@@ -41,6 +41,13 @@ Then the cmd can be adjusted at will without having to go over the whole code an
 
 #### You can call cmd you designed via json-rpc: simply call the command name. 
 
+##### Start a smtp server (localhost :9999) 
+Issue command line:
+```
+json-rpc_server.py smtplib:SMTP('localhost')
+
+```
+
 ##### POST request to a single url (default : localhost:9999 )
 
 ##### Example command payload json:

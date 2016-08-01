@@ -7,6 +7,9 @@ App handle zeroph via json-rpc endpoint
 
 The json-rpc server will trigger zeroph methods, or group call. 
 This is a alternative endpoint from command line call
+Example smtp server instance command:
+
+smtplib:SMTP('localhost')
 
 Example cmd request json:
 
