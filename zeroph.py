@@ -210,7 +210,7 @@ class ZeroPh(object):
                     commands.pop(index+1)
                 except:
                     text = traceback.format_exc()
-                    exc_value = sys.exc_info()[
+                    exc_value = sys.exc_info()[1]
                     self.onError(text, exc_value, str(cmd) )
             else:
                 try:
@@ -225,8 +225,6 @@ class ZeroPh(object):
                     exc_value = sys.exc_info()[1]
                     self.onError(text, exc_value, str(cmd) )
                 
-         
-
     def onError(self, error, message, _id):
         """
         onError return a print message with the stacktrace or message
