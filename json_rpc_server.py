@@ -11,7 +11,7 @@ This will create the server on default port 9999
 """
 
 import sys
-import json-rpc_app
+import json_rpc_app
 
 def main(args=None):
     import optparse

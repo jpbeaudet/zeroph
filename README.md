@@ -90,7 +90,6 @@ json-rpc_server.py smtplib:SMTP('localhost')
 
 ### TODOS: 
 
-- Add a json-rpc server listening, start as default init cmds
 - add better exception catching
 - Make ini commands in config and start them at init with chosen delays
 - make group command that can be launch toheter as init
