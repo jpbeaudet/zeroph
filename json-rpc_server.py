@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 """
-Author : Jean-Philippe Beaudet@s3r3nity
+Author : 
+author: Ian Bicking - Jean-Philippe Beaudet@s3r3nity
 
 App handle zeroph via json-rpc endpoint
 
