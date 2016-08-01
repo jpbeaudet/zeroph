@@ -166,16 +166,18 @@ class ZeroPh(object):
                 if is_number(cmds[0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPh() INFO | Init process: '+str(cmds[1])+': waiting ' + str(cmds[0])+' seconds')
-                    self.wait_and_call(int(cmds[0]),cmds[1])
+                    q1 = enthread(self.wait_and_call, (int(cmds[0]),cmds[1]))
+                    #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
                 elif isinstance(cmds[0], str):
-                    commands=[]
+                    CMD=[]
                     if cmds[1].split(",") > 0:
                         for command in cmds[1].split(","):
-                            commands.append(command)
+                            CMD.append(command)
                     else:
-                        commands.append(cmds[1])
-                    self.wait_cascade(commands)
+                        CMD.append(cmds[1])
+                    q1 = enthread(self.wait_cascade, (CMD))
+                    #self.wait_cascade(CMD)
                     continue
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
