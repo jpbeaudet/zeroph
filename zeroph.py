@@ -163,9 +163,11 @@ class ZeroPh(object):
         """
         if len(commands) >0:
             for cmds in commands:
+                    if self.verbose:
+                        print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(cmds))
                 if is_number(cmds[0]):
                     if self.verbose:
-                        print(str(timenow())+' ZeroPh() INFO | Init process: '+str(cmds[1])+': waiting ' + str(cmds[0])+' seconds')
+                        print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(cmds[1])+': waiting ' + str(cmds[0])+' seconds')
                     q1 = enthread(self.wait_and_call, (int(cmds[0]),cmds[1]))
                     #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
@@ -173,9 +175,11 @@ class ZeroPh(object):
                     if cmds[1].split(",") > 0:
                         if self.verbose:
                             print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
-                        q1 = enthread(self.wait_cascade, cmds[1])
+                        c = cmds[1]
+                        q1 = enthread(self.wait_cascade, c)
                     else:
-                        q2 = enthread(self.call, cmds[1])
+                        cmds[1]
+                        q2 = enthread(self.call, c)
                     #CMD=["Test2","Test3"]
                     #q1 = enthread(self.wait_cascade, CMD)
                     #self.wait_cascade(CMD)
@@ -217,6 +221,7 @@ class ZeroPh(object):
                 try:
                     result= self.wait_and_call(int(cmd), commands[index+1])
                     commands.pop(index+1)
+                    continue
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
