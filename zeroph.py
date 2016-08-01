@@ -171,7 +171,9 @@ class ZeroPh(object):
                     continue
                 elif isinstance(cmds[0], str):
                     if cmds[1].split(",") > 0:
-                        q1 = enthread(self.wait_cascade, (cmds[1]))
+                        if self.verbose:
+                            print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
+                        q1 = enthread(self.wait_cascade, cmds[1])
                     else:
                         q1 = enthread(self.call, CMD)
                     #CMD=["Test2","Test3"]
@@ -208,6 +210,8 @@ class ZeroPh(object):
         
         """
         commands = commands.split(",")
+        if self.verbose:
+            print(str(timenow())+' ZeroPh() INFO | wait_cascade() commands: '+str(commands))
         for cmd, index in commands:
             if is_number(cmd):
                 try:
