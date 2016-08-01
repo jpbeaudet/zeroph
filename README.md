@@ -49,6 +49,7 @@ Then the cmd can be adjusted at will without having to go over the whole code an
 - design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
 - make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
 - make a global onSuCess, onFail, onError, onDisconnect, onConnRefused subclass make it in a template python call to be easily customizable
+- Make unittests
 - Make readable documentation
 
 
