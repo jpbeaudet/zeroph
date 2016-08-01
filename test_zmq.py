@@ -27,7 +27,7 @@ class TestZmq(object):
         
         """
         # server
-        context = zmq.Context()
+        context = zmq.Context() 
         socket = context.socket(zmq.REP)
 
         socket.bind(self.host+':'+self.port)
