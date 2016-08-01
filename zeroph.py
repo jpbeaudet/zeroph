@@ -222,7 +222,7 @@ class ZeroPh(object):
                         raise except
                 except:
                     text = traceback.format_exc()
-                    exc_value = sys.exc_info()[
+                    exc_value = sys.exc_info()[1]
                     self.onError(text, exc_value, str(cmd) )
                 
          
