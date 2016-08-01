@@ -30,7 +30,7 @@ Test : python,test.py,-t,hello world
 
 ```
 
-#### Then:
+#### Then -n + command name:
 ```
 python zeroph.py -n Test
 
@@ -39,9 +39,50 @@ python zeroph.py -n Test
 ##### You can add new cmd in [Cmd] section at will and then call them in threads with a word
 Then the cmd can be adjusted at will without having to go over the whole code and also lunch separate process in threads
 
+#### You can call cmd you designed via json-rpc: simply call the command name. 
+
+##### Example command call json:
+```
+{"cmd": "cmdName",
+ "id": "arbitrary-something"}
+ 
+```
+##### Example success response:
+```
+{"result": the_result,
+ "error": null,
+ "id": "arbitrary-something"}
+
+```
+##### Example error response:
+```
+ {"result": null,
+ "error": {"name": "JSONRPCError",
+           "code": (number 100-999),
+           "message": "Some Error Occurred",
+           "error": "whatever you want\n(a traceback?)"},
+ "id": "arbitrary-something"}
+
+```
+
+
+### Dependencies:
+
+- threading
+- zeromq
+- subprocess
+- os
+- arg-parse
+- ConfigParser
+- json-rpc
+- webob
+- traceback
+
+
 ### TODOS: 
 
 - Add a json-rpc server listening, start as default init cmds
+- add better exception catching
 - Make ini commands in config and start them at init with chosen delays
 - make group command that can be launch toheter as init
 - ad websocket server listening and start it at defauult init
@@ -50,6 +91,7 @@ Then the cmd can be adjusted at will without having to go over the whole code an
 - make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
 - make a global onSuCess, onFail, onError, onDisconnect, onConnRefused subclass make it in a template python call to be easily customizable
 - Make unittests
+- add a REST-ful endpoint with flask and/or django
 - Make readable documentation
 
 
