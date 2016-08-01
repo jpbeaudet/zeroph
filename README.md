@@ -89,17 +89,26 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - simplejson
 
 
-### TODOS: 
+### TODOS for v 1.0:
+
+#### Priority 
 
 - add better exception catching
 - Make ini commands in config and start them at init with chosen delays
 - make group command that can be launch toheter as init
-- ad websocket server listening and start it at defauult init
-- Find a way to send rcv other type of dasta than string
-- design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
-- make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
 - make a global onSuCess, onFail, onError, onDisconnect, onConnRefused subclass make it in a template python call to be easily customizable
 - Make unittests
+
+
+#### Secondary:
+
+- design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
+- make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
+- Find a way to send rcv other type of dasta than string
+
+#### Niceties:
+
+- ad websocket server listening and start it at defauult init
 - add a REST-ful endpoint with flask and/or django
 - Make readable documentation
 

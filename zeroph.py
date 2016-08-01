@@ -110,7 +110,7 @@ class ZeroPh(object):
             print(str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method))
             cmd=str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method)
         if self.verbose:
-            print(str(timenow())+' v() INFO | cmd sent to server: ' + str(cmd))
+            print(str(timenow())+' ZeroPh() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
