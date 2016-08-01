@@ -207,7 +207,7 @@ class ZeroPh(object):
             if is_number(cmd):
                 try:
                     result= self.wait_and_call(cmd, commands[index+1] 
-                    command.pop(index+1)
+                    commands.pop(index+1)
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[
