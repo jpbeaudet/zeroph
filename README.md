@@ -46,12 +46,14 @@ Then the cmd can be adjusted at will without having to go over the whole code an
 
 ### TODOS: 
 
+- Add a json-rpc server listening, start as default init cmds
+- Make ini commands in config and start them at init with chosen delays
+- make group command that can be launch toheter as init
+- ad websocket server listening and start it at defauult init
 - Find a way to send rcv other type of dasta than string
 - design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
 - make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
-- make a global onFail, onError, onDisconnect, onConnRefused mandatory strategy for the handler
-- make a command related .onFail, .onError, .onDisconnect, .onConnRefused strategy defaults
-- Make custom error and update code with good error handling
+- make a global onSuCess, onFail, onError, onDisconnect, onConnRefused subclass make it in a template python call to be easily customizable
 - Make readable documentation
 
 
