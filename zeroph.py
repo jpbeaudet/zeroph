@@ -171,7 +171,7 @@ class ZeroPh(object):
                     continue
                 elif isinstance(cmds[0], str):
                     if cmds[1].split(",") > 0:
-                        q1 = enthread(self.wait_cascade, cmds[1])
+                        q1 = enthread(self.wait_cascade, (cmds[1]))
                     else:
                         q1 = enthread(self.call, CMD)
                     #CMD=["Test2","Test3"]
