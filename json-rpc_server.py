@@ -3,111 +3,45 @@
 """
 Author : Jean-Philippe Beaudet@s3r3nity
 
-Server handle zeroph via json-rpc endpoint
+App handle zeroph via json-rpc endpoint
 
-The json-rpc server will trigger zeroph methods, or group call. 
-This is a alternative endpoint from command line call
+This will create the server on default port 9999
 
-Example cmd request json:
-
-{"cmd": "cmdName",
- "id": "arbitrary-something"}
-    
-Example succes response: 
-​
-{"result": the_result,
- "error": null,
- "id": "arbitrary-something"}
- 
-Example error response:
- 
- {"result": null,
- "error": {"name": "JSONRPCError",
-           "code": (number 100-999),
-           "message": "Some Error Occurred",
-           "error": "whatever you want\n(a traceback?)"},
- "id": "arbitrary-something"}
- 
 """
 
-from webob import Request, Response
-from webob import exc
-from simplejson import loads, dumps
-import traceback
 import sys
-import zeroph
 
-class JsonRpcApp(object):
-    """
-    Serve the given object via json-rpc (http://json-rpc.org/)
-    """
-
-    def __init__(self, obj):
-        self.obj = obj
-
-    def __call__(self, environ, start_response):
-        req = Request(environ)
-        try:
-            resp = self.process(req)
-        except ValueError, e:
-            resp = exc.HTTPBadRequest(str(e))
-        except exc.HTTPException, e:
-            resp = e
-        return resp(environ, start_response)
-
-    def process(self, req):
-        if not req.method == 'POST':
-            raise exc.HTTPMethodNotAllowed(
-                "Only POST allowed",
-                allowed='POST')
-        try:
-            json = loads(req.body)
-        except ValueError, e:
-            raise ValueError('Bad JSON: %s' % e)
-        try:
-            method = json['cmd']
-            #params = json['params']
-            id = json['id']
-        except KeyError, e:
-            raise ValueError(
-                "JSON body missing parameter: %s" % e)
-        if method.startswith('_'):
-            raise exc.HTTPForbidden(
-                "Bad method name %s: must not start with _" % method)
-                
-        #if not isinstance(params, list):
-            #raise ValueError(
-                #"Bad params %r: must be a list" % params)
-                
-        # Fun start here
-        ##############################################
-        #try:
-            #z = zeroph.ZeroPh(True)
-            #method = z.call(method)
-            #method = getattr(self.obj, method)
-        #except AttributeError:
-            #raise ValueError(
-                #"No such cmd %s" % method)
-        try:
-            z = zeroph.ZeroPh(True)
-            result = z.call(method)
-            #result = method(*params)
-        except:
-            text = traceback.format_exc()
-            exc_value = sys.exc_info()[1]
-            error_value = dict(
-                name='JSONRPCError',
-                code=100,
-                message=str(exc_value),
-                error=text)
-            return Response(
-                status=500,
-                content_type='application/json',
-                body=dumps(dict(result=None,
-                                error=error_value,
-                                id=id)))
-        return Response(
-            content_type='application/json',
-            body=dumps(dict(result=result,
-                            error=None,
-                            id=id)))
+def main(args=None):
+    import optparse
+    from wsgiref import simple_server
+    parser = optparse.OptionParser(
+        usage="%prog [OPTIONS] MODULE:EXPRESSION")
+    parser.add_option(
+        '-p', '--port', default='9999',
+        help='Port to serve on (default 9999)')
+    parser.add_option(
+        '-H', '--host', default='127.0.0.1',
+        help='Host to serve on (default localhost; 0.0.0.0 to make public)')
+    if args is None:
+        args = sys.argv[1:]
+    options, args = parser.parse_args()
+    if not args or len(args) > 1:
+        print 'You must give a single object reference'
+        parser.print_help()
+        sys.exit(2)
+    app = make_app(args[0])
+    server = simple_server.make_server(
+        options.host, int(options.port),
+        app)
+    print 'Serving on http://%s:%s' % (options.host, options.port)
+    server.serve_forever()
+    
+def make_app(expr):
+    module, expression = expr.split(':', 1)
+    __import__(module)
+    module = sys.modules[module]
+    obj = eval(expression, module.__dict__)
+    return JsonRpcApp(obj)
+    
+if __name__ == '__main__':
+    main()

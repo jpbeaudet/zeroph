@@ -41,7 +41,9 @@ Then the cmd can be adjusted at will without having to go over the whole code an
 
 #### You can call cmd you designed via json-rpc: simply call the command name. 
 
-##### Example command call json:
+##### POST request to a single url (default : localhost:9999 )
+
+##### Example command payload json:
 ```
 {"cmd": "cmdName",
  "id": "arbitrary-something"}
