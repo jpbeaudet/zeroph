@@ -30,7 +30,7 @@ _PORT=Config.get("Default",'Port')
 _INIT= []
 for (each_key, each_val) in Config.items("Init"):
     _INIT.append([ each_key, each_val])
-    print(str(timenow())+' ZeroPh() CONFIG | Init key : '+str(each_key)' val:' + str(each_val))
+    print(str(timenow())+' ZeroPh() CONFIG | Init key : '+str(each_key)+ ' val:' + str(each_val))
 
 class ZeroPh(object):
     
