@@ -216,24 +216,24 @@ class ZeroPh(object):
         commands = commands.split(",")
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | wait_cascade() commands: '+str(commands))
-        for cmd, index in commands:
-            if is_number(cmd):
+        for x in range(len(commands)):
+            if is_number(commands[x]):
                 try:
-                    result= self.wait_and_call(int(cmd), commands[index+1])
-                    commands.pop(index+1)
+                    result= self.wait_and_call(int(commands[x]), commands[x+1])
+                    commands.pop(x+1)
                     continue
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
-                    self.onError(text, exc_value, str(cmd) )
+                    self.onError(text, exc_value, str(commands[x]) )
             else:
                 try:
-                    result = self.call(cmd)
-                    ok = self.onReturn(result, str(cmd))
+                    result = self.call(commands[x])
+                    ok = self.onReturn(result, str(commands[x]))
                     if ok:
                         continue
                     else:
-                        _continue = self.onFail("FAIL in wait_cascade: ", "return value was empty ", str(cmd))
+                        _continue = self.onFail("FAIL in wait_cascade: ", "return value was empty ", str(commands[x]))
                         if _continue:
                             continue
                         else:
@@ -241,7 +241,7 @@ class ZeroPh(object):
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
-                    self.onError(text, exc_value, str(cmd) )
+                    self.onError(text, exc_value, str(commands[x]) )
                 
     def onError(self, error, message, _id):
         """
