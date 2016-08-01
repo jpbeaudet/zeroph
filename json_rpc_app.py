@@ -50,6 +50,7 @@ class JsonRpcApp(object):
 
     def __call__(self, environ, start_response):
         req = Request(environ)
+        print("_call_ as been exited for "+str(req))
         try:
             resp = self.process(req)
         except ValueError, e:
@@ -59,6 +60,7 @@ class JsonRpcApp(object):
         return resp(environ, start_response)
 
     def process(self, req):
+        print("process as been called for "+str(req))
         if not req.method == 'POST':
             raise exc.HTTPMethodNotAllowed(
                 "Only POST allowed",
