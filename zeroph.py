@@ -174,7 +174,7 @@ class ZeroPh(object):
                 elif isinstance(cmds[0], str):
                     if commands[x][1].split(",") > 0:
                         if self.verbose:
-                            print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
+                            print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
                         q1 = enthread(self.wait_cascade, (c, str(commands[x][0])))
                     else:
