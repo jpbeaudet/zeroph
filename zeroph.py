@@ -260,7 +260,7 @@ class ZeroPh(object):
             return False
                 
 
-    def onReturn(self, value, _id)):
+    def onReturn(self, value, _id):
         """
         onReturn value strategy
         Here will be run the strategy
