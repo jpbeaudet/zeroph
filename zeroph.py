@@ -162,7 +162,7 @@ class ZeroPh(object):
         
         """
         if len(commands) >0:
-            for x in range(len(commands):
+            for x in range(len(commands)):
                 if self.verbose:
                     print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(commands[x]))
                 if is_number(commands[x][0]):
