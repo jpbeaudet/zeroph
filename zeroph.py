@@ -161,7 +161,7 @@ class ZeroPh(object):
         
         """
         if len(commands) >0:
-            for cmds in commands
+            for cmds in commands:
                 if is_number(cmds[0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPh() INFO | Init process: '+str(cmds[1])': waiting ' + str(cmds[0])+' seconds')
