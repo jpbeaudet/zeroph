@@ -19,6 +19,7 @@ from subprocess import Popen, PIPE
 import threading
 import Queue
 import ConfigParser
+import traceback
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -26,7 +27,10 @@ Config.read("config.ini")
 section = Config.sections()
 _HOST=Config.get("Default",'Host')
 _PORT=Config.get("Default",'Port')
-
+_INIT= []
+for (each_key, each_val) in Config.items("Init"):
+    _INIT.append([ each_key, each_val])
+    print(str(timenow())+' ZeroPh() CONFIG | Init key : '+str(each_key)' val:' + str(each_val))
 
 class ZeroPh(object):
     
@@ -34,6 +38,23 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
+        self.init()
+        
+    def init(self):
+        """
+        Start the base services described in config.ini in [Init] section
+        
+        If nothing then continue on listening. 
+        if key is a number then wait the number of seconds
+        @params: {file} config.ini
+        @rtype:{}
+        
+        """
+        if len(_INIT) >0:
+            return self.parse_commands(_INIT)
+        else:
+            pass
+        
         
     def run_server(self):
         """
@@ -43,7 +64,6 @@ class ZeroPh(object):
         # server
         context = zmq.Context()
         socket = context.socket(zmq.REP)
-
         socket.bind(self.host+':'+self.port)
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | socket now listen on port: ' + str(self.port))
@@ -114,7 +134,127 @@ class ZeroPh(object):
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))        
+            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))     
+        return msg
+
+    def parse_command_group(self, section):
+        """
+        Parse the group of command and store in into a list
+        
+        @params: {str} Section name to get list from
+        @rtype: {list} List of key,value to be parsed as commands
+        
+        """
+        result =[]
+        for (each_key, each_val) in Config.items(section):
+            result.append([ each_key, each_val])
+        return result
+        
+    def parse_commands(self, commands):
+        """
+        Parse commands
+        
+        Will read the key and determine if it is a wait call or a cascade list
+        (number can be contained in the list and will trigger a wait_and_call)
+        
+        @params:{list} list of commands (format: [[key,value],[key,value]] )
+        
+        """
+        if len(commands) >0:
+            for cmds in commands
+                if is_number(cmds[0]):
+                    if self.verbose:
+                        print(str(timenow())+' ZeroPh() INFO | Init process: '+str(cmds[1])': waiting ' + str(cmds[0])+' seconds')
+                    self.wait_and_call(cmds[0],cmds[1])
+                elif isinstance(cmds[0], str):
+                    commands=[]
+                    if cmds[1].split(",") > 0:
+                        for command in cmds[1].split(","):
+                            commands.append(command)
+                    else:
+                        commands.append(cmds[1])
+                    self.wait_cascade(commands)
+        else:
+            return self.onError("ERROR in parse_commands: ", "commands was empty")
+            
+        return True
+        
+    def wait_and_call(self, seconds, command):
+        """
+        wait number of seconds before lunching command
+        @params:{int} number of seconds
+        @params:{str} command
+        @rtype{func} call the command
+        
+        """
+        time.sleep(seconds)
+        return self.call(command)
+        
+    def wait_cascade(self, commands):
+        """
+        wait on a return value before calling next command. Here will
+        go the onReturn, onError, strategy.
+        
+        If cmd is a number , wait and call the enxt command in (number) seconds
+        
+        Here will also go the custom strategy(set at onReturn event)
+        
+        @params:{list} list of commands
+        @rtype{func} call the command
+        
+        """
+        for cmd, index in commands:
+            if is_number(cmd):
+                try:
+                    result= self.wait_and_call(cmd, commands[index+1] 
+                    command.pop(index+1)
+                except:
+                    text = traceback.format_exc()
+                    exc_value = sys.exc_info()[
+                    self.onError(text, exc_value, str(cmd) )
+            else:
+                try:
+                    result = self.call(cmd)
+                    ok = self.onReturn(result, str(cmd))
+                    if ok:
+                        continue
+                    else:
+                        raise except
+                except:
+                    text = traceback.format_exc()
+                    exc_value = sys.exc_info()[
+                    self.onError(text, exc_value, str(cmd) )
+                
+         
+
+    def onError(self, error, message, _id):
+        """
+        onError return a print message with the stacktrace or message
+        
+        @params:{str} error
+        @params: {str} message
+        @params: {str} id for following (to be implemented)
+        
+        """
+        if self.verbose:
+            print(str(timenow())+' ZeroPh() ERROR | server returned error: '+str(error)+' message: ' + str(message))  
+        return True
+        
+    def onReturn(self, value, _id)):
+        """
+        onReturn value strategy
+        Here will be run the strategy
+        
+        @params:{str} return value
+
+        """
+        # put the strategy
+        if self.verbose:
+            print(str(timenow())+' ZeroPh() INFO | server returned return value: '+str(value)+' for: ' + str(_id)) 
+        if value != null:
+            return True
+        else:
+            return False
         
 def cmd(cmd, verbose):
     """
@@ -150,7 +290,14 @@ def enthread(target, args):
 
 def timenow():
     return datetime.datetime.now().time()
-    
+
+def is_number(s):
+    try:
+        int(s)
+        return True
+    except ValueError:
+        return False
+
 def main():
     parser = argparse.ArgumentParser(description='zeromq server/client for CmdToThread()')
     parser.add_argument('-v', '--verbose', action='store_true', help='Flag to verbose')
@@ -170,7 +317,7 @@ def main():
     elif args.start:
         zeroph.run_server()
     elif args.name:
-        zeroph.call(args.name)
+        result = zeroph.call(args.name)
     else:
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
