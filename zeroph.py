@@ -178,7 +178,7 @@ class ZeroPh(object):
                         c = cmds[1]
                         q1 = enthread(self.wait_cascade, c)
                     else:
-                        cmds[1]
+                        c= cmds[1]
                         q2 = enthread(self.call, c)
                     #CMD=["Test2","Test3"]
                     #q1 = enthread(self.wait_cascade, CMD)
@@ -317,7 +317,8 @@ def cmd(cmd, verbose):
 def enthread(target, args):
     q = Queue.Queue()
     def wrapper():
-        q.put(target(*args))
+        if len(args) >1:
+            q.put(target(*args))
     t = threading.Thread(target=wrapper)
     t.start()
     return q
