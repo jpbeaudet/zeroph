@@ -25,11 +25,6 @@ Port: 5555
 Host: tcp://127.0.0.1
 
 [Cmd]
-[Default]
-Port: 5555
-Host: tcp://127.0.0.1
-
-[Cmd]
 Test : python,test.py,-t,hello world
 
 
