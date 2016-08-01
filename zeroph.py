@@ -219,7 +219,11 @@ class ZeroPh(object):
                     if ok:
                         continue
                     else:
-                        raise except
+                        _continue = self.onFail("FAIL in wait_cascade: ", "return value was empty ", str(cmd))
+                        if _continue:
+                            continue
+                        else:
+                            break
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
@@ -237,7 +241,25 @@ class ZeroPh(object):
         if self.verbose:
             print(str(timenow())+' ZeroPh() ERROR | server returned error: '+str(error)+' message: ' + str(message))  
         return True
+    
+    def onFail(self, error, message, _id):
+        """
+        onFail return a print message with the message of the fail but let the cascade coninue
         
+        @params:{str} error
+        @params: {str} message
+        @params: {str} id for following (to be implemented)
+        
+        """
+        if self.verbose:
+            print(str(timenow())+' ZeroPh() FAIL | server returned fialed return value: '+str(error)+' message: ' + str(message)) 
+        _continue = Config.get("Default", "onFail")
+        if _continue: 
+            return True 
+        else:
+            return False
+                
+
     def onReturn(self, value, _id)):
         """
         onReturn value strategy
@@ -250,7 +272,7 @@ class ZeroPh(object):
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | server returned return value: '+str(value)+' for: ' + str(_id)) 
         if value != null:
-            return True
+            return value
         else:
             return False
         
