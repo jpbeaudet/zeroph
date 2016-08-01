@@ -162,23 +162,23 @@ class ZeroPh(object):
         
         """
         if len(commands) >0:
-            for cmds in commands:
+            for x in range(len(commands):
                 if self.verbose:
-                    print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(cmds))
-                if is_number(cmds[0]):
+                    print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(commands[x]))
+                if is_number(commands[x][0]):
                     if self.verbose:
-                        print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(cmds[1])+': waiting ' + str(cmds[0])+' seconds')
-                    q1 = enthread(self.wait_and_call, (int(cmds[0]),cmds[1]))
+                        print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
+                    q1 = enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
                     #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
                 elif isinstance(cmds[0], str):
-                    if cmds[1].split(",") > 0:
+                    if commands[x][1].split(",") > 0:
                         if self.verbose:
                             print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
-                        c = cmds[1]
-                        q1 = enthread(self.wait_cascade, (c, str(cmds[0])))
+                        c = commands[x][1]
+                        q1 = enthread(self.wait_cascade, (c, str(commands[x][0])))
                     else:
-                        c= cmds[1]
+                        c= commands[x][1]
                         q2 = enthread(self.call, c)
                     #CMD=["Test2","Test3"]
                     #q1 = enthread(self.wait_cascade, CMD)
