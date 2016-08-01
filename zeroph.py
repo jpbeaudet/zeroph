@@ -20,6 +20,7 @@ import threading
 import Queue
 import ConfigParser
 import traceback
+import sys
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -30,7 +31,7 @@ _PORT=Config.get("Default",'Port')
 _INIT= []
 for (each_key, each_val) in Config.items("Init"):
     _INIT.append([ each_key, each_val])
-    print(str(timenow())+' ZeroPh() CONFIG | Init key : '+str(each_key)+ ' val:' + str(each_val))
+    print('CONFIG | Init key : '+str(each_key)+ ' val:' + str(each_val))
 
 class ZeroPh(object):
     
@@ -271,7 +272,7 @@ class ZeroPh(object):
         # put the strategy
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | server returned return value: '+str(value)+' for: ' + str(_id)) 
-        if value != null:
+        if value:
             return value
         else:
             return False
