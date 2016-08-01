@@ -166,7 +166,7 @@ class ZeroPh(object):
                 if is_number(cmds[0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPh() INFO | Init process: '+str(cmds[1])+': waiting ' + str(cmds[0])+' seconds')
-                    self.wait_and_call(cmds[0],cmds[1])
+                    self.wait_and_call(int(cmds[0]),cmds[1])
                 elif isinstance(cmds[0], str):
                     commands=[]
                     if cmds[1].split(",") > 0:
@@ -207,7 +207,7 @@ class ZeroPh(object):
         for cmd, index in commands:
             if is_number(cmd):
                 try:
-                    result= self.wait_and_call(cmd, commands[index+1])
+                    result= self.wait_and_call(int(cmd), commands[index+1])
                     commands.pop(index+1)
                 except:
                     text = traceback.format_exc()
