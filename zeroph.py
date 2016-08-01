@@ -176,7 +176,7 @@ class ZeroPh(object):
                         if self.verbose:
                             print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(cmds[1]))
                         c = cmds[1]
-                        q1 = enthread(self.wait_cascade, c)
+                        q1 = enthread(self.wait_cascade, (c, str(cmds[0])))
                     else:
                         c= cmds[1]
                         q2 = enthread(self.call, c)
@@ -200,7 +200,7 @@ class ZeroPh(object):
         time.sleep(seconds)
         return self.call(command)
         
-    def wait_cascade(self, commands):
+    def wait_cascade(self, commands. _id):
         """
         wait on a return value before calling next command. Here will
         go the onReturn, onError, strategy.
@@ -317,8 +317,7 @@ def cmd(cmd, verbose):
 def enthread(target, args):
     q = Queue.Queue()
     def wrapper():
-        if len(args) >1:
-            q.put(target(*args))
+        q.put(target(*args))
     t = threading.Thread(target=wrapper)
     t.start()
     return q
