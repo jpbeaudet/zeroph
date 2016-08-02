@@ -22,7 +22,7 @@ import ConfigParser
 import traceback
 import sys
 import os
-from multiprocessing import Process, Queue 
+from multiprocessing import Process 
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -347,17 +347,15 @@ def get(q, target, args):
     q.put(enthread(target, args))
 
 def do(target, args):
-    q = Queue()
+    q = Queue.Queue()
     try:
         p = Process(target=get, args=(q, target, args))
         p.start()
         response = q.get()
         p.join()
-        #p.stopListening()
         return response
          
     except (KeyboardInterrupt, SystemExit):
-        p.stop()
         sys.exit()
 
 def timenow():
