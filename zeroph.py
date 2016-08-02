@@ -22,7 +22,6 @@ import ConfigParser
 import traceback
 import sys
 import os
-from multiprocessing import Process 
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -215,21 +214,21 @@ class ZeroPhParser(ZeroPhServer):
                 if is_number(commands[x][0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
-                    q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
-                    #self.wait_and_call(int(cmds[0]),cmds[1])
+                    #q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
+                    self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
                 elif isinstance(commands[x][0], str):
                     if commands[x][1].split(",") > 0:
                         if self.verbose:
                             print(str(timenow())+' ZeroPhParser() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
-                        q1 = self.enthread(self.wait_cascade, (c, str(commands[x][0])))
+                        #q1 = self.enthread(self.wait_cascade, (c, str(commands[x][0])))
+                        self.wait_cascade(c, str(commands[x][0]))
                     else:
                         c= commands[x][1]
-                        q2 = self.enthread(self.call, c)
-                    #CMD=["Test2","Test3"]
-                    #q1 = enthread(self.wait_cascade, CMD)
-                    #self.wait_cascade(CMD)
+                        #q2 = self.enthread(self.call, c)
+                        self.call(c)
+                        
                     continue
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
