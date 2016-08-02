@@ -82,6 +82,8 @@ class ZeroPhServer(ZeroPh):
                 # Create two threads as follows
                 q1 = enthread(cmd, (msg, self.verbose))
                 response= q1.get()
+                if self.verbose:
+                    print(str(timenow())+' ZeroPh() INFO | q1.get(): ' + str(q1.get())) 
                 q1.task_done()
                 if response and response != "":
                     socket.send(str(response))
