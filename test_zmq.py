@@ -73,9 +73,9 @@ def main():
         verbose = True
     testzmq = TestZmq(verbose)
     
-    if args.start:
+    if args.test:
         testzmq.send(args.test)
-    elif args.test:
+    elif args.start:
         testzmq.run_server()
     else:
         print(str(timenow())+' TestZmq() WARNING | missing argument, need a sentence or start the server with -s')

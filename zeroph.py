@@ -21,6 +21,7 @@ import Queue
 import ConfigParser
 import traceback
 import sys
+import os
 
 # load configs
 Config = ConfigParser.ConfigParser()
