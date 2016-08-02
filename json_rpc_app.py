@@ -71,22 +71,26 @@ class JsonRpcApp(object):
             raise ValueError('Bad JSON: %s' % e)
         try:
             method = json['cmd']
-            #params = json['params']
+            params = json['group']
             id = json['id']
         except KeyError, e:
             raise ValueError(
                 "JSON body missing parameter: %s" % e)
+                
         if method.startswith('_'):
             raise exc.HTTPForbidden(
                 "Bad method name %s: must not start with _" % method)
                 
-        #if not isinstance(params, list):
-            #raise ValueError(
-                #"Bad params %r: must be a list" % params)
+        if not isinstance(params, bool):
+            raise ValueError(
+                "Bad params %r: must be a boolean" % params)
                 
         try:
             z = zeroph.ZeroPhServer(True)
-            result = z.call(method)
+            if params:
+                result = z.parser.call_group(method)
+            else:
+                result = z.call(method)
             #result = method(*params)
         except:
             text = traceback.format_exc()
