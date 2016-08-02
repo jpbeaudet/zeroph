@@ -93,12 +93,10 @@ json-rpc_server.py smtplib:SMTP('localhost')
 
 #### Priority 
 
-- add better exception catching
-- Make ini commands in config and start them at init with chosen delays
-- make group command that can be launch toheter as init
-- make a global onSuCess, onFail, onError, onDisconnect, onConnRefused subclass make it in a template python call to be easily customizable
+- make a superclass with xeroph and divie between subclass: Server: call,send,runserver  | parser: parse_commands, wait_and_call, wait | middleware: onFail, onReturn, onError, strategies
 - Make unittests
-
+- add better exception catch (built custom error handling if necessary)
+- make group command that can be launch toheter as init
 
 #### Secondary:
 
