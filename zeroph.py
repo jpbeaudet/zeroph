@@ -347,6 +347,7 @@ def do(target, args):
         p.start()
         p.join()
         response = p.get()
+        p.stopListening()
         return response
          
     except (KeyboardInterrupt, SystemExit):
