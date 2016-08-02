@@ -342,13 +342,17 @@ def enthread(target, args):
     except (KeyboardInterrupt, SystemExit):
         cleanup_stop_thread();
         sys.exit()
+        
+def get(q, target, args):
+    q.put(enthread(target, args))
 
 def do(target, args):
+    q = Queue.Queue()
     try:
-        p = Process(target=enthread, args=(target, args))
+        p = Process(target=get, args=(q, target, args))
         p.start()
+        response = q.get()
         p.join()
-        response = p
         p.stopListening()
         return response
          
