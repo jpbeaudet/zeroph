@@ -44,8 +44,8 @@ class ZeroPh(object):
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-        ZeroPhParser.__init__(self, verbose)
-        ZeroPhHandler.__init__(self, verbose)
+        #ZeroPhParser.__init__(self, verbose)
+        #ZeroPhHandler.__init__(self, verbose)
         
     def init(self):
         """
@@ -146,7 +146,7 @@ class ZeroPhServer(ZeroPh):
         
 class ZeroPhParser(ZeroPh):    
     def __init__(self, verbose):
-        pass
+        ZeroPh.__init__(self, verbose)
         
     def parse_command_group(self, section):
         """
@@ -255,7 +255,7 @@ class ZeroPhParser(ZeroPh):
 
 class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
-        pass
+        ZeroPh.__init__(self, verbose)
 
     def onError(self, error, message, _id):
         """
