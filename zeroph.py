@@ -182,7 +182,8 @@ class ZeroPhServer(ZeroPh):
         
 class ZeroPhParser(ZeroPhServer):    
     def __init__(self, verbose):
-        ZeroPhServer.__init__(self, verbose)
+        ZeroPh.__init__(self, verbose)
+        self.handler = ZeroPhHandler(verbose)
         
     def parse_command_group(self, section):
         """
