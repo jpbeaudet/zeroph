@@ -17,7 +17,7 @@ import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import threading
-import Queue
+import Queue+++
 import ConfigParser
 import traceback
 import sys
@@ -32,7 +32,6 @@ _PORT=Config.get("Default",'Port')
 _INIT= []
 for (each_key, each_val) in Config.items("Init"):
     _INIT.append([ each_key, each_val])
-    print('CONFIG | Init key : '+str(each_key)+ ' val:' + str(each_val))
 
 class ZeroPh(object):
     def __init__(self, verbose):
@@ -67,6 +66,7 @@ class ZeroPh(object):
         q = Queue.Queue()
         def wrapper():
             q.put(target(*args))
+            q.task_done()
         t = threading.Thread(target=wrapper)
         try:
             t.start()
