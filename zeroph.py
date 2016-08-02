@@ -181,10 +181,9 @@ class ZeroPhServer(ZeroPh):
             print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))     
         return msg
         
-class ZeroPhParser(ZeroPhServer):    
+class ZeroPhParser(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-        self.handler = ZeroPhHandler(verbose)
         
     def parse_command_group(self, section):
         """
@@ -251,7 +250,7 @@ class ZeroPhParser(ZeroPhServer):
         result = self.call(command)
         return result
         
-class ZeroPhHandler(ZeroPhParser):    
+class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
 
