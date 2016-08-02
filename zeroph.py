@@ -228,7 +228,6 @@ class ZeroPhParser(ZeroPhServer):
                         c= commands[x][1]
                         #q2 = self.enthread(self.call, c)
                         self.call(c)
-                        
                     continue
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
