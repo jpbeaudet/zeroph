@@ -215,7 +215,7 @@ class ZeroPhParser(ZeroPhServer):
                 if is_number(commands[x][0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
-                    q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
+                    q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), (commands[x][1]))
                     #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
                 elif isinstance(commands[x][0], str):
