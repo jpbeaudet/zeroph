@@ -39,13 +39,14 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
-        ZeroPhParser.__init__(self, verbose)
-        ZeroPhHandler.__init__(self, verbose)
+
         
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-
+        ZeroPhParser.__init__(self, verbose)
+        ZeroPhHandler.__init__(self, verbose)
+        
     def init(self):
         """
         Start the base services described in config.ini in [Init] section
