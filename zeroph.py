@@ -94,7 +94,7 @@ class ZeroPhServer(ZeroPh):
         
         """
         if len(_INIT) >0:
-            return self.parser.parse_commands(_INIT)
+            self.parser.parse_commands(_INIT)
         else:
             pass
         
