@@ -87,16 +87,14 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - webob
 - traceback
 - simplejson
-- multiprocessing and Process
 
 ### TODOS for v 1.0:
 
 #### Priority 
 
-- make a superclass with xeroph and divie between subclass: Server: call,send,runserver  | parser: parse_commands, wait_and_call, wait | middleware: onFail, onReturn, onError, strategies
 - Make unittests
 - add better exception catch (built custom error handling if necessary)
-- make group command that can be launch toheter as init
+- add group command call 
 
 #### Secondary:
 
@@ -109,5 +107,8 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - ad websocket server listening and start it at defauult init
 - add a REST-ful endpoint with flask and/or django
 - Make readable documentation
+
+#### Bugs:
+- Group command , wait casdade and wait and call 
 
 
