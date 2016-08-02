@@ -319,8 +319,13 @@ def enthread(target, args):
     def wrapper():
         q.put(target(*args))
     t = threading.Thread(target=wrapper)
-    t.start()
-    return q
+    try:
+        t.start()
+        return q 
+    except (KeyboardInterrupt, SystemExit):
+        cleanup_stop_thread();
+        sys.exit()
+
 
 def timenow():
     return datetime.datetime.now().time()
@@ -356,4 +361,11 @@ def main():
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except KeyboardInterrupt:
+        print 'Interrupted'
+        try:
+            sys.exit(0)
+        except SystemExit:
+            os._exit(0)
