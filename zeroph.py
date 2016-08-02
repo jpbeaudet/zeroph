@@ -233,11 +233,11 @@ class ZeroPhParser(ZeroPhServer):
                         self.do(self.call, c)
                         continue
                         #result = self.call(c)
-                    
+            return True        
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
             
-        return True
+        
        
     def do(self, target, args):
         """
