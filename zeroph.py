@@ -347,7 +347,7 @@ def get(q, target, args):
     q.put(enthread(target, args))
 
 def do(target, args):
-    q = queue.Queue()
+    q = queue()
     try:
         p = Process(target=get, args=(q, target, args))
         p.start()
