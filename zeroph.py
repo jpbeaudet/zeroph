@@ -80,10 +80,8 @@ class ZeroPhServer(ZeroPh):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                response = do(cmd, (msg, self.verbose))
-                #q1 = enthread(cmd, (msg, self.verbose))
-                #socket.send(str(q1.get()))
-                socket.send(str(response.get()))
+                q1 = enthread(cmd, (msg, self.verbose))
+                socket.send(str(q1.get()))
             else:
                 print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
                 
@@ -341,21 +339,6 @@ def enthread(target, args):
         return q 
     except (KeyboardInterrupt, SystemExit):
         cleanup_stop_thread();
-        sys.exit()
-        
-def get(q, target, args):
-    q.put(enthread(target, args))
-
-def do(target, args):
-    q = Queue.Queue()
-    try:
-        p = Process(target=get, args=(q, target, args))
-        p.start()
-        response = q.get()
-        p.join()
-        return response
-         
-    except (KeyboardInterrupt, SystemExit):
         sys.exit()
 
 def timenow():
