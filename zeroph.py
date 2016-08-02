@@ -81,7 +81,6 @@ class ZeroPhServer(ZeroPh):
             if isinstance(msg, str):
                 # Create two threads as follows
                 q1 = enthread(cmd, (msg, self.verbose))
-                response= 
                 #q1.task_done()
                 socket.send(str(q1.get()))
             else:
