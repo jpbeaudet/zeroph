@@ -336,7 +336,9 @@ def enthread(target, args):
     t = threading.Thread(target=wrapper)
     try:
         t.start()
-        return q 
+        response = q
+        q.task_done()
+        return response 
     except (KeyboardInterrupt, SystemExit):
         cleanup_stop_thread();
         sys.exit()
