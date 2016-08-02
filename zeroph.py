@@ -71,7 +71,6 @@ class ZeroPh(object):
         try:
             t.start()
             response = q
-            #q.task_done()
             return response 
         except (KeyboardInterrupt, SystemExit):
             cleanup_stop_thread();
@@ -250,7 +249,7 @@ class ZeroPhParser(ZeroPhServer):
         result = self.call(command)
         return result
         
-class ZeroPhHandler(ZeroPhParser):    
+class ZeroPhHandler(ZeroPhServer):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
 
