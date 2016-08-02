@@ -81,14 +81,9 @@ class ZeroPhServer(ZeroPh):
             if isinstance(msg, str):
                 # Create two threads as follows
                 q1 = enthread(cmd, (msg, self.verbose))
-                response= q1.get()
-                if self.verbose:
-                    print(str(timenow())+' ZeroPh() INFO | q1.get(): ' + str(q1.get())) 
+                response= 
                 #q1.task_done()
-                if response and response != "":
-                    socket.send(str(response))
-                else:
-                    socket.send(str(timenow())+' ZeroPh() INFO |'+ cmd+' as been started.' )
+                socket.send(str(q1.get()))
             else:
                 print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
                 
