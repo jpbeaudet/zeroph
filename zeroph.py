@@ -39,8 +39,6 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
-        self.parser = ZeroPhParser(verbose)
-        self.handler = ZeroPhHandler(verbose)
         
     def cmd(self, cmd, verbose):
         """
@@ -82,7 +80,8 @@ class ZeroPh(object):
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-
+        self.parser = ZeroPhParser(verbose)
+        self.handler = ZeroPhHandler(verbose)
 
     def init(self):
         """
@@ -181,9 +180,10 @@ class ZeroPhServer(ZeroPh):
             print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))     
         return msg
         
-class ZeroPhParser(ZeroPh):    
+class ZeroPhParser(ZeroPhServer):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
+        self.handler = ZeroPhHandler(verbose)
         
     def parse_command_group(self, section):
         """
@@ -250,7 +250,7 @@ class ZeroPhParser(ZeroPh):
         result = self.call(command)
         return result
         
-class ZeroPhHandler(ZeroPh):    
+class ZeroPhHandler(ZeroPhParser):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
 
