@@ -85,7 +85,7 @@ class JsonRpcApp(object):
                 #"Bad params %r: must be a list" % params)
                 
         try:
-            z = zeroph.ZeroPh(True)
+            z = zeroph.ZeroPhServer(True)
             result = z.call(method)
             #result = method(*params)
         except:

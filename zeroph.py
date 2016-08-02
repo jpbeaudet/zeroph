@@ -39,13 +39,13 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
-        
+        ZeroPhParser.__init__(self, verbose)
+        ZeroPhHandler.__init__(self, verbose)
         
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-        self.init()
-        
+
     def init(self):
         """
         Start the base services described in config.ini in [Init] section
@@ -73,7 +73,7 @@ class ZeroPhServer(ZeroPh):
         socket.bind(self.host+':'+self.port)
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | socket now listen on port: ' + str(self.port))
-            
+        self.init()
         while True:
             msg = socket.recv()
             if isinstance(msg, str):
@@ -142,7 +142,11 @@ class ZeroPhServer(ZeroPh):
         if self.verbose:
             print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))     
         return msg
-
+        
+class ZeroPhParser(ZeroPh):    
+    def __init__(self, verbose):
+        pass
+        
     def parse_command_group(self, section):
         """
         Parse the group of command and store in into a list
@@ -247,7 +251,11 @@ class ZeroPhServer(ZeroPh):
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
                     self.onError(text, exc_value, str(commands[x]) )
-                
+
+class ZeroPhHandler(ZeroPh):    
+    def __init__(self, verbose):
+        pass
+
     def onError(self, error, message, _id):
         """
         onError return a print message with the stacktrace or message
