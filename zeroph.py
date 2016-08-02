@@ -41,7 +41,7 @@ class ZeroPh(object):
         self.host=_HOST
         self.port=_PORT
         
-    def cmd(cmd, verbose):
+    def cmd(self, cmd, verbose):
         """
         Run the actual command in thread
         
@@ -64,7 +64,7 @@ class ZeroPh(object):
                 print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
             return stdout
 
-    def enthread(target, args):
+    def enthread(self, target, args):
         q = Queue.Queue()
         def wrapper():
             q.put(target(*args))
