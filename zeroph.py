@@ -39,6 +39,8 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
+        self.parser = ZeroPhParser(verbose)
+        self.handler = ZeroPhHandler(verbose)
         
     def cmd(self, cmd, verbose):
         """
@@ -80,8 +82,7 @@ class ZeroPh(object):
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
-        self.parser = ZeroPhParser(verbose)
-        self.handler = ZeroPhHandler(verbose)
+
 
     def init(self):
         """
@@ -250,49 +251,6 @@ class ZeroPhParser(ZeroPhServer):
         result = self.call(command)
         return result
         
-    def wait_cascade(self, commands, _id):
-        """
-        wait on a return value before calling next command. Here will
-        go the onReturn, onError, strategy.
-        
-        If cmd is a number , wait and call the enxt command in (number) seconds
-        
-        Here will also go the custom strategy(set at onReturn event)
-        
-        @params:{list} list of commands
-        @rtype{func} call the command
-        
-        """
-        commands = commands.split(",")
-        if self.verbose:
-            print(str(timenow())+' ZeroPhParser() INFO | wait_cascade() commands: '+str(commands))
-        for x in range(len(commands)):
-            if is_number(commands[x]):
-                try:
-                    result= self.wait_and_call(int(commands[x]), commands[x+1])
-                    commands.pop(x+1)
-                    continue
-                except:
-                    text = traceback.format_exc()
-                    exc_value = sys.exc_info()[1]
-                    self.handler.onError(text, exc_value, str(commands[x]) )
-            else:
-                try:
-                    result = self.call(commands[x])
-                    ok = self.handler.onReturn(result, str(commands[x]))
-                    if ok:
-                        continue
-                    else:
-                        _continue = self.handler.onFail("FAIL in wait_cascade: ", "return value was empty ", str(commands[x]))
-                        if _continue:
-                            continue
-                        else:
-                            break
-                except:
-                    text = traceback.format_exc()
-                    exc_value = sys.exc_info()[1]
-                    self.handler.onError(text, exc_value, str(commands[x]) )
-
 class ZeroPhHandler(ZeroPhParser):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
