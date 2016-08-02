@@ -215,7 +215,7 @@ class ZeroPhParser(ZeroPhServer):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
                     #q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
-                    self.wait_and_call(int(commands[x][0]),commands[x][1])
+                    result = self.wait_and_call(int(commands[x][0]),commands[x][1])
                     continue
                 elif isinstance(commands[x][0], str):
                     if commands[x][1].split(",") > 0:
@@ -223,11 +223,11 @@ class ZeroPhParser(ZeroPhServer):
                             print(str(timenow())+' ZeroPhParser() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
                         #q1 = self.enthread(self.wait_cascade, (c, str(commands[x][0])))
-                        self.wait_cascade(c, str(commands[x][0]))
+                        result = self.wait_cascade(c, str(commands[x][0]))
                     else:
                         c= commands[x][1]
                         #q2 = self.enthread(self.call, c)
-                        self.call(c)
+                        result = self.call(c)
                     continue
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
@@ -243,7 +243,8 @@ class ZeroPhParser(ZeroPhServer):
         
         """
         time.sleep(seconds)
-        return self.call(command)
+        result = self.call(command)
+        return result
         
     def wait_cascade(self, commands, _id):
         """
