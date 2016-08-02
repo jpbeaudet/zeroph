@@ -87,7 +87,7 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - webob
 - traceback
 - simplejson
-
+- multiprocessing and Process
 
 ### TODOS for v 1.0:
 

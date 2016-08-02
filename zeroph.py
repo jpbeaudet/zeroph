@@ -22,6 +22,7 @@ import ConfigParser
 import traceback
 import sys
 import os
+from multiprocessing import Process
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -46,10 +47,7 @@ class ZeroPhServer(ZeroPh):
         ZeroPh.__init__(self, verbose)
         self.parser = ZeroPhParser(verbose)
         self.handler = ZeroPhHandler(verbose)
-        
-        #ZeroPhParser.__init__(self, verbose)
-        #ZeroPhHandler.__init__(self, verbose)
-        
+
     def init(self):
         """
         Start the base services described in config.ini in [Init] section
@@ -343,6 +341,17 @@ def enthread(target, args):
         cleanup_stop_thread();
         sys.exit()
 
+def do(target, args):
+    try:
+        p = Process(target=enthread, args=(target, args))
+        p.start()
+        p.join()
+        response = p.get()
+        return response
+         
+    except (KeyboardInterrupt, SystemExit):
+        p.stop()
+        sys.exit()
 
 def timenow():
     return datetime.datetime.now().time()
