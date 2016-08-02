@@ -84,7 +84,7 @@ class ZeroPhServer(ZeroPh):
                 response= q1.get()
                 if self.verbose:
                     print(str(timenow())+' ZeroPh() INFO | q1.get(): ' + str(q1.get())) 
-                q1.task_done()
+                #q1.task_done()
                 if response and response != "":
                     socket.send(str(response))
                 else:
