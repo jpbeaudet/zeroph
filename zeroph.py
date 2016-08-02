@@ -349,7 +349,7 @@ def main():
     elif args.name:
         result = zeroph.call(args.name)
     elif args.group:
-        result= zeroph
+        result= zeroph.call_group(args.group)
     else:
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
