@@ -22,7 +22,7 @@ import ConfigParser
 import traceback
 import sys
 import os
-from multiprocessing import Process, Queue as queue
+from multiprocessing import Process, Queue 
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -347,7 +347,7 @@ def get(q, target, args):
     q.put(enthread(target, args))
 
 def do(target, args):
-    q = queue()
+    q = Queue()
     try:
         p = Process(target=get, args=(q, target, args))
         p.start()
