@@ -340,9 +340,7 @@ class ZeroPhHandler(ZeroPhParser):
             return value
         else:
             return False
-        
-
-
+            
 def timenow():
     return datetime.datetime.now().time()
 
