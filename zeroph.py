@@ -74,7 +74,7 @@ class ZeroPhServer(ZeroPh):
         socket = context.socket(zmq.REP)
         socket.bind(self.host+':'+self.port)
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | socket now listen on port: ' + str(self.port))
+            print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
         self.init()
         while True:
             msg = socket.recv()
@@ -83,7 +83,7 @@ class ZeroPhServer(ZeroPh):
                 q1 = enthread(cmd, (msg, self.verbose))
                 socket.send(str(q1.get()))
             else:
-                print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
+                print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not converted to list ')
                 
     def send(self, _type, _file, _cmd):
         """
@@ -107,16 +107,16 @@ class ZeroPhServer(ZeroPh):
             if arg != ",":
                 cmd= cmd+","
                 if self.verbose:
-                    print(str(timenow())+' ZeroPh() INFO | arg in _cmd: ' + str(arg)) 
+                    print(str(timenow())+' ZeroPhServer() INFO | arg in _cmd: ' + str(arg)) 
 
                 cmd = cmd + arg.replace("[","").replace("]","") 
 
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | cmd sent to server: ' + str(cmd))
+            print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))
+            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
             
     def call(self, method):
         """
@@ -135,14 +135,14 @@ class ZeroPhServer(ZeroPh):
         try:
             cmd= Config.get("Cmd", method)
         except:
-            print(str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method))
-            cmd=str(timenow())+' ZeroPh() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method)
+            print(str(timenow())+' ZeroPhServer() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method))
+            cmd=str(timenow())+' ZeroPhServer() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method)
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | cmd sent to server: ' + str(cmd))
+            print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         socket.send(cmd)
         msg = socket.recv()
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))     
+            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))     
         return msg
         
 class ZeroPhParser(ZeroPhServer):    
@@ -175,17 +175,17 @@ class ZeroPhParser(ZeroPhServer):
         if len(commands) >0:
             for x in range(len(commands)):
                 if self.verbose:
-                    print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(commands[x]))
+                    print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x]))
                 if is_number(commands[x][0]):
                     if self.verbose:
-                        print(str(timenow())+' ZeroPh() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
+                        print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
                     q1 = enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
                     #self.wait_and_call(int(cmds[0]),cmds[1])
                     continue
                 elif isinstance(commands[x][0], str):
                     if commands[x][1].split(",") > 0:
                         if self.verbose:
-                            print(str(timenow())+' ZeroPh() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
+                            print(str(timenow())+' ZeroPhParser() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
                         q1 = enthread(self.wait_cascade, (c, str(commands[x][0])))
                     else:
@@ -226,7 +226,7 @@ class ZeroPhParser(ZeroPhServer):
         """
         commands = commands.split(",")
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | wait_cascade() commands: '+str(commands))
+            print(str(timenow())+' ZeroPhParser() INFO | wait_cascade() commands: '+str(commands))
         for x in range(len(commands)):
             if is_number(commands[x]):
                 try:
@@ -268,7 +268,7 @@ class ZeroPhHandler(ZeroPhParser):
         
         """
         if self.verbose:
-            print(str(timenow())+' ZeroPh() ERROR | server returned error: '+str(error)+' message: ' + str(message))  
+            print(str(timenow())+' ZeroPhHandler() ERROR | server returned error: '+str(error)+' message: ' + str(message))  
         return True
     
     def onFail(self, error, message, _id):
@@ -281,7 +281,7 @@ class ZeroPhHandler(ZeroPhParser):
         
         """
         if self.verbose:
-            print(str(timenow())+' ZeroPh() FAIL | server returned fialed return value: '+str(error)+' message: ' + str(message)) 
+            print(str(timenow())+' ZeroPhHandler() FAIL | server returned fialed return value: '+str(error)+' message: ' + str(message)) 
         _continue = Config.get("Default", "onFail")
         if _continue: 
             return True 
@@ -299,7 +299,7 @@ class ZeroPhHandler(ZeroPhParser):
         """
         # put the strategy
         if self.verbose:
-            print(str(timenow())+' ZeroPh() INFO | server returned return value: '+str(value)+' for: ' + str(_id)) 
+            print(str(timenow())+' ZeroPhHandler() INFO | server returned return value: '+str(value)+' for: ' + str(_id)) 
         if value:
             return value
         else:
