@@ -183,7 +183,24 @@ class ZeroPhParser(ZeroPhServer):
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
         self.handler = ZeroPhHandler(verbose)
+    
+    def call_group(self, group):
+        """
+        Add the possibility to manually (in in method group!) call a method group .
         
+        @params: {str} section group to fetch from config
+        @rtype: result
+        
+        """
+        try:
+            commands = self.parse_command_group(group)
+            result= self.parse_commands(commands)
+            return result
+            
+        except ValueError as (e):
+            print(str(timenow())+' ZeroPhParser() WARNING | the group DOES NOT exists please try again: ' + str(msg)) 
+            return e
+              
     def parse_command_group(self, section):
         """
         Parse the group of command and store in into a list
@@ -220,7 +237,7 @@ class ZeroPhParser(ZeroPhServer):
                 elif isinstance(commands[x][0], str):
                     result= self.do(self.call, (int(commands[x][0]), commands[x][1]))
                     result = self.handler.onReturn(result, commands[x][1])
-            return True        
+            return result        
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
             
@@ -318,6 +335,7 @@ def main():
     parser.add_argument('-c', '--cmd', nargs='+', help='{list} cmd args and parameters')
     parser.add_argument('-s', '--start', action='store_true', help='start the server')
     parser.add_argument('-n', '--name',  help='{string} Name of the method to fetch in config')
+    parser.add_argument('-g', '--group',  help='{string} Call a method group')
     args = parser.parse_args()
     verbose = False
     if args.verbose:
@@ -330,6 +348,8 @@ def main():
         zeroph.run_server()
     elif args.name:
         result = zeroph.call(args.name)
+    elif args.group:
+        result= zeroph
     else:
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
