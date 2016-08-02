@@ -23,7 +23,7 @@ class TestZmq(object):
         
     def run_server(self):
         """
-        Start the server. Listen for test call
+        Start the server. Listen for test call 
         
         """
         # server
