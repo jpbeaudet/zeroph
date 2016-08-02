@@ -214,7 +214,8 @@ class ZeroPhParser(ZeroPhServer):
                 if is_number(commands[x][0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
-                    q1 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
+                    q0 = self.enthread(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
+                    result= q0.get()
                     #result = self.wait_and_call(int(commands[x][0]),commands[x][1])
                     continue
                 elif isinstance(commands[x][0], str):
@@ -223,12 +224,16 @@ class ZeroPhParser(ZeroPhServer):
                             print(str(timenow())+' ZeroPhParser() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
                         q1 = self.enthread(self.wait_cascade, (c, str(commands[x][0])))
+                        result= q1.get()
+                        continue
                         #result = self.wait_cascade(c, str(commands[x][0]))
                     else:
                         c= commands[x][1]
                         q2 = self.enthread(self.call, c)
+                        result= q2.get()
+                        continue
                         #result = self.call(c)
-                    continue
+                    
         else:
             return self.onError("ERROR in parse_commands: ", "commands was empty")
             
