@@ -22,7 +22,7 @@ import ConfigParser
 import traceback
 import sys
 import os
-from multiprocessing import Process
+from multiprocessing import Process, Queue
 
 # load configs
 Config = ConfigParser.ConfigParser()
@@ -80,10 +80,10 @@ class ZeroPhServer(ZeroPh):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                #response = do(cmd, (msg, self.verbose))
-                q1 = enthread(cmd, (msg, self.verbose))
-                socket.send(str(q1.get()))
-                #socket.send(str(response))
+                response = do(cmd, (msg, self.verbose))
+                #q1 = enthread(cmd, (msg, self.verbose))
+                #socket.send(str(q1.get()))
+                socket.send(str(response.get()))
             else:
                 print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
                 
@@ -353,7 +353,7 @@ def do(target, args):
         p.start()
         response = q.get()
         p.join()
-        p.stopListening()
+        #p.stopListening()
         return response
          
     except (KeyboardInterrupt, SystemExit):
