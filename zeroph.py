@@ -61,7 +61,7 @@ class ZeroPhServer(ZeroPh):
         
         """
         if len(_INIT) >0:
-            return self.parse_commands(_INIT)
+            return self.parser.parse_commands(_INIT)
         else:
             pass
         
@@ -147,7 +147,7 @@ class ZeroPhServer(ZeroPh):
             print(str(timenow())+' ZeroPh() INFO | server returned response: ' + str(msg))     
         return msg
         
-class ZeroPhParser(ZeroPh):    
+class ZeroPhParser(ZeroPhServer):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
         
@@ -238,15 +238,15 @@ class ZeroPhParser(ZeroPh):
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
-                    self.onError(text, exc_value, str(commands[x]) )
+                    self.handler.onError(text, exc_value, str(commands[x]) )
             else:
                 try:
                     result = self.call(commands[x])
-                    ok = self.onReturn(result, str(commands[x]))
+                    ok = self.handler.onReturn(result, str(commands[x]))
                     if ok:
                         continue
                     else:
-                        _continue = self.onFail("FAIL in wait_cascade: ", "return value was empty ", str(commands[x]))
+                        _continue = self.handler.onFail("FAIL in wait_cascade: ", "return value was empty ", str(commands[x]))
                         if _continue:
                             continue
                         else:
@@ -254,9 +254,9 @@ class ZeroPhParser(ZeroPh):
                 except:
                     text = traceback.format_exc()
                     exc_value = sys.exc_info()[1]
-                    self.onError(text, exc_value, str(commands[x]) )
+                    self.handler.onError(text, exc_value, str(commands[x]) )
 
-class ZeroPhHandler(ZeroPh):    
+class ZeroPhHandler(ZeroPhParser):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
 
