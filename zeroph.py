@@ -44,6 +44,9 @@ class ZeroPh(object):
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
+        self.parser = ZeroPhParser(verbose)
+        self.handler = ZeroPhHandler(verbose)
+        
         #ZeroPhParser.__init__(self, verbose)
         #ZeroPhHandler.__init__(self, verbose)
         
