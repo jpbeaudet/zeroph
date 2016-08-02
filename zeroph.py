@@ -338,7 +338,7 @@ def enthread(target, args):
     t = threading.Thread(target=wrapper)
     try:
         t.start()
-        return q 
+        return q.get() 
     except (KeyboardInterrupt, SystemExit):
         cleanup_stop_thread();
         sys.exit()
@@ -348,7 +348,7 @@ def do(target, args):
         p = Process(target=enthread, args=(target, args))
         p.start()
         p.join()
-        response = p.get()
+        response = p
         p.stopListening()
         return response
          
