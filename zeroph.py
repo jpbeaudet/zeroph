@@ -40,7 +40,43 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
+        
+    def cmd(cmd, verbose):
+        """
+        Run the actual command in thread
+        
+        @params: {str} cmd: the command to run
+        @rtype: {} return value
+        
+        """
 
+        if verbose:
+            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd))
+        query= cmd.split(",")
+        if verbose:
+            print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
+        process = Popen(query, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
+        else:
+            if verbose:
+                print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
+            return stdout
+
+    def enthread(target, args):
+        q = Queue.Queue()
+        def wrapper():
+            q.put(target(*args))
+        t = threading.Thread(target=wrapper)
+        try:
+            t.start()
+            response = q
+            #q.task_done()
+            return response 
+        except (KeyboardInterrupt, SystemExit):
+            cleanup_stop_thread();
+            sys.exit()
         
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose):
@@ -80,7 +116,7 @@ class ZeroPhServer(ZeroPh):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                q1 = enthread(cmd, (msg, self.verbose))
+                q1 = self.enthread(self.cmd, (msg, self.verbose))
                 socket.send(str(q1.get()))
             else:
                 print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not converted to list ')
@@ -187,10 +223,10 @@ class ZeroPhParser(ZeroPhServer):
                         if self.verbose:
                             print(str(timenow())+' ZeroPhParser() INFO | parse_commands() cmds[1]: '+str(commands[x][1]))
                         c = commands[x][1]
-                        q1 = enthread(self.wait_cascade, (c, str(commands[x][0])))
+                        q1 = self.enthread(self.wait_cascade, (c, str(commands[x][0])))
                     else:
                         c= commands[x][1]
-                        q2 = enthread(self.call, c)
+                        q2 = self.enthread(self.call, c)
                     #CMD=["Test2","Test3"]
                     #q1 = enthread(self.wait_cascade, CMD)
                     #self.wait_cascade(CMD)
@@ -305,43 +341,7 @@ class ZeroPhHandler(ZeroPhParser):
         else:
             return False
         
-def cmd(cmd, verbose):
-    """
-    Run the actual command in thread
-        
-    @params: {str} cmd: the command to run
-    @rtype: {} return value
-        
-    """
 
-    if verbose:
-        print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd))
-    query= cmd.split(",")
-    if verbose:
-        print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
-    process = Popen(query, stdout=PIPE, stderr=PIPE)
-    stdout, stderr = process.communicate()
-    if stderr:
-        print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
-    else:
-        if verbose:
-            print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
-        return stdout
-        
-        
-def enthread(target, args):
-    q = Queue.Queue()
-    def wrapper():
-        q.put(target(*args))
-    t = threading.Thread(target=wrapper)
-    try:
-        t.start()
-        response = q
-        #q.task_done()
-        return response 
-    except (KeyboardInterrupt, SystemExit):
-        cleanup_stop_thread();
-        sys.exit()
 
 def timenow():
     return datetime.datetime.now().time()
