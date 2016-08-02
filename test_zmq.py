@@ -53,7 +53,7 @@ class TestZmq(object):
         socket.connect(self.host+':'+self.port)
         
         if self.verbose:
-            print(str(timenow())+' TestZmq() INFO | msg sent to server: ' + str(msg))
+            print(str(timenow())+' TestZmq() INFO | msg sent to server: ' + str(sentence))
         socket.send(sentence)
         msg = socket.recv()
         if self.verbose:
