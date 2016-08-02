@@ -81,7 +81,7 @@ class ZeroPhServer(ZeroPh):
             if isinstance(msg, str):
                 # Create two threads as follows
                 q1 = enthread(cmd, (msg, self.verbose))
-                socket.send(str(q1))
+                socket.send(str(q1.get()))
             else:
                 print(str(timenow())+' ZeroPh() WARNING | Error: cmd was not converted to list ')
                 
@@ -336,7 +336,7 @@ def enthread(target, args):
     t = threading.Thread(target=wrapper)
     try:
         t.start()
-        response = q.get()
+        response = q
         q.task_done()
         return response 
     except (KeyboardInterrupt, SystemExit):
