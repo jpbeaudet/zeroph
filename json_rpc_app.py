@@ -84,15 +84,6 @@ class JsonRpcApp(object):
             #raise ValueError(
                 #"Bad params %r: must be a list" % params)
                 
-        # Fun start here
-        ##############################################
-        #try:
-            #z = zeroph.ZeroPh(True)
-            #method = z.call(method)
-            #method = getattr(self.obj, method)
-        #except AttributeError:
-            #raise ValueError(
-                #"No such cmd %s" % method)
         try:
             z = zeroph.ZeroPh(True)
             result = z.call(method)

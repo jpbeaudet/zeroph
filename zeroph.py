@@ -35,11 +35,15 @@ for (each_key, each_val) in Config.items("Init"):
     print('CONFIG | Init key : '+str(each_key)+ ' val:' + str(each_val))
 
 class ZeroPh(object):
-    
     def __init__(self, verbose):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
+        
+        
+class ZeroPhServer(ZeroPh):    
+    def __init__(self, verbose):
+        ZeroPh.__init__(self, verbose)
         self.init()
         
     def init(self):
@@ -350,7 +354,7 @@ def main():
     verbose = False
     if args.verbose:
         verbose = True
-    zeroph = ZeroPh(verbose)
+    zeroph = ZeroPhServer(verbose)
     
     if args._type and args._file and args.cmd:
         zeroph.send(args._type, args._file, args.cmd)
