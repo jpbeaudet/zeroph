@@ -53,6 +53,16 @@ json-rpc_server.py smtplib:SMTP('localhost')
 ##### Example command payload json:
 ```
 {"cmd": "cmdName",
+ "group" : false,
+ "id": "arbitrary-something"}
+ 
+```
+
+##### or
+
+```
+{"cmd": "groupName",
+ "group" : true,
  "id": "arbitrary-something"}
  
 ```
@@ -93,8 +103,7 @@ json-rpc_server.py smtplib:SMTP('localhost')
 #### Priority 
 
 - Make unittests
-- add better exception catch (built custom error handling if necessary)
-- add group command call 
+
 
 #### Secondary:
 
@@ -109,6 +118,7 @@ json-rpc_server.py smtplib:SMTP('localhost')
 - Make readable documentation
 
 #### Bugs:
-- Group command , wait casdade and wait and call 
+- Fix the zmq with a option to trigget a non listenning thread 
+- Fix the the fact that it cannot call itself 
 
 
