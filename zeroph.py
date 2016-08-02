@@ -17,7 +17,7 @@ import datetime
 import subprocess
 from subprocess import Popen, PIPE
 import threading
-import Queue+++
+import Queue
 import ConfigParser
 import traceback
 import sys
