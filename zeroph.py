@@ -38,6 +38,7 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
+        self.handler = ZeroPhHandler(verbose)
         
     def cmd(self, cmd, verbose):
         """
@@ -75,12 +76,6 @@ class ZeroPh(object):
         except (KeyboardInterrupt, SystemExit):
             cleanup_stop_thread();
             sys.exit()
-        
-class ZeroPhServer(ZeroPh):    
-    def __init__(self, verbose):
-        ZeroPh.__init__(self, verbose)
-        self.parser = ZeroPhParser(verbose)
-        self.handler = ZeroPhHandler(verbose)
 
     def init(self):
         """
@@ -93,7 +88,7 @@ class ZeroPhServer(ZeroPh):
         
         """
         if len(_INIT) >0:
-            self.parser.parse_commands(_INIT)
+            self.parse_commands(_INIT)
         else:
             pass
         
@@ -179,11 +174,6 @@ class ZeroPhServer(ZeroPh):
             print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))     
         return msg
         
-class ZeroPhParser(ZeroPhServer):    
-    def __init__(self, verbose):
-        ZeroPh.__init__(self, verbose)
-        self.handler = ZeroPhHandler(verbose)
-    
     def call_group(self, group):
         """
         Add the possibility to manually (in in method group!) call a method group .
@@ -266,7 +256,7 @@ class ZeroPhParser(ZeroPhServer):
         result = self.call(command)
         return result
         
-class ZeroPhHandler(ZeroPhServer):    
+class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
         ZeroPh.__init__(self, verbose)
 
