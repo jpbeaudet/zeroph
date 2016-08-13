@@ -27,12 +27,24 @@ Host: tcp://127.0.0.1
 [Cmd]
 Test : python,test.py,-t,hello world
 
+[TestGroup]
+1: Test
+2: Test
+3: Test
 
 ```
 
 #### Then -n + command name:
 ```
 python zeroph.py -n Test
+
+```
+or
+####  -g + groupcommand name:
+The number in comandgroup config reprsent a waiting time before starting job list
+
+```
+python zeroph.py -n TestGoup
 
 ```
 
@@ -103,22 +115,26 @@ json-rpc_server.py smtplib:SMTP('localhost')
 #### Priority 
 
 - Make unittests
-
+- switch from multithread to multiprocess(thinking about using joblibs maybe)
+- makes jobs list into a queue self object with _id(pid) and trigger onReturn when a job are finished
+- add a unsupervised process launching (not listening to return value) option
 
 #### Secondary:
 
 - design the follower class that will listen to PID of threads (and ensure PID is passed thourgth the process pipeline)
+- add a stop process helper method using collected PID in the jobs queue
 - make a optional middleware strategy(python class instance) that will trigger pass assertion on return value before sending it back,(will be appended for mandatory strategies)
-- Find a way to send rcv other type of dasta than string
+- Make the helper class to encode return value to bytes then bytes2string sending types along and then convert it back to bytes and them to initial types(excluding string return value)
+- Use traceback to collect error traceback from source cmd and retun it along the way to the user
 
 #### Niceties:
 
-- ad websocket server listening and start it at defauult init
+- ad websocket server listening and start it at default init
 - add a REST-ful endpoint with flask and/or django
 - Make readable documentation
 
 #### Bugs:
-- Fix the zmq with a option to trigget a non listenning thread 
+---- Fix the zmq with a option to trigget a non listenning thread ----
 - Fix the the fact that it cannot call itself 
 
 
