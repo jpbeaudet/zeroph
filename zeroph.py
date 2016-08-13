@@ -258,7 +258,7 @@ class ZeroPh(object):
         
 class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
-        ZeroPh.__init__(self, verbose)
+        pass
 
     def onError(self, error, message, _id):
         """
