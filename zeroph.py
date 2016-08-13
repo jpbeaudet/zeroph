@@ -330,7 +330,7 @@ def main():
     verbose = False
     if args.verbose:
         verbose = True
-    zeroph = ZeroPhServer(verbose)
+    zeroph = ZeroPh(verbose)
     
     if args._type and args._file and args.cmd:
         zeroph.send(args._type, args._file, args.cmd)
@@ -339,7 +339,7 @@ def main():
     elif args.name:
         result = zeroph.call(args.name)
     elif args.group:
-        result= zeroph.parser.call_group(args.group)
+        result= zeroph.call_group(args.group)
     else:
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 
