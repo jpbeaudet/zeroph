@@ -153,7 +153,7 @@ class ZeroPhClient(ZeroPh):
             if self.verbose:
                 print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
             res = self.handler.onReturn(msg, "")
-            return res
+            #return res
 
     def send(self, _type, _file, _cmd):
         """
