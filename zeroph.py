@@ -39,6 +39,7 @@ class ZeroPh(object):
         self.host=_HOST
         self.port=_PORT
         self.handler = ZeroPhHandler(verbose)
+        self.processes = Config.get("Default", "processes")
         
     def cmd(self, cmd, verbose):
         """
@@ -109,7 +110,8 @@ class ZeroPh(object):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                q1 = self.enthread(self.cmd, (msg, self.verbose))
+                worker = ZeroPhWorker(verbose, self.processes)
+                q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
                 socket.send(str(q1.get()))
             else:
                 print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not converted to list ')
@@ -256,6 +258,60 @@ class ZeroPh(object):
         result = self.call(command)
         return result
         
+class ZeroPhWorker(ZeroPh):    
+    def __init__(self, verbose, processes):
+        self.verbose =verbose
+        self.processes = processes
+
+    def start_jobs(self, msg, verbose):
+        """
+        """
+        # Create a list of jobs and then iterate through
+        # the number of processes appending each process to
+        # the job list 
+        out_q = Queue.Queue()
+        jobs = []
+        result = ""
+        for i in range(0, self.processes):
+            out_list = list()
+            process = multiprocessing.Process(target=self.cmd, 
+                                            args=(msg, self.verbose, out_q))
+            jobs.append(process)
+            process.start()
+            result += out_q.get()
+
+        # Ensure all of the processes have finished
+        for j in jobs:
+            j.join()
+        
+        if self.verbose:
+            print(str(timenow())+' ZeroPhParser() INFO | Joblist List processing complete. | result: '+str(result))
+        return result
+
+    def cmd(self, cmd, verbose, out_q):
+        """
+        Run the actual command in thread
+        
+        @params: {str} cmd: the command to run
+        @rtype: {} return value
+        
+        """
+
+        if verbose:
+            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd)) 
+        query= cmd.split(",")
+        if verbose:
+            print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
+        process = Popen(query, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
+        else:
+            if verbose:
+                print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
+                
+            out_q.put(stdout)
+                    
 class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
         self.verbose =verbose
