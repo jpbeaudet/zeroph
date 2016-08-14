@@ -22,6 +22,7 @@ import ConfigParser
 import traceback
 import sys
 import os
+import multiprocessing
 
 # load configs
 Config = ConfigParser.ConfigParser()
