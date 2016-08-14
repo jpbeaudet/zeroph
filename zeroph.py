@@ -39,7 +39,7 @@ class ZeroPh(object):
         self.host=_HOST
         self.port=_PORT
         self.handler = ZeroPhHandler(verbose)
-        self.processes = Config.get("Default", "processes")
+        self.processes = int(Config.get("Default", "processes"))
         
     def cmd(self, cmd, verbose):
         """
