@@ -284,7 +284,7 @@ class ZeroPhWorker(ZeroPh):
         # Ensure all of the processes have finished
         for j in jobs:
             j.join()
-        
+        out_q.task_done()
         if self.verbose:
             print(str(timenow())+' ZeroPhParser() INFO | Joblist List processing complete. | result: '+str(result))
         return result
@@ -310,8 +310,8 @@ class ZeroPhWorker(ZeroPh):
         else:
             if verbose:
                 print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
-                
             out_q.put(stdout)
+        return True
                     
 class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
