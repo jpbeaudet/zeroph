@@ -157,7 +157,7 @@ class ZeroPhClient(ZeroPh):
         """
         # client 
         self.socket.connect(self.host+':'+self.port)
-        msg = socket.recv()
+        msg = self.socket.recv()
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
         res = self.handler.onReturn(msg, "")
