@@ -64,9 +64,12 @@ class ZeroPhServer(ZeroPh):
         @rtype: {str} launch res with result
         
         """
+        if self.verbose:
+            print(str(timenow())+' ZeroPhServer() INFO | req: ' + str(msg))
         worker = ZeroPhWorker(self.verbose, self.processes)
         q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
         self.res(str(q1.get()))
+    
         return True
         
     def res(self, res):
@@ -78,6 +81,8 @@ class ZeroPhServer(ZeroPh):
         """
         # server
         self.socket.bind(self.host+':'+self.port)
+        if self.verbose:
+            print(str(timenow())+' ZeroPhServer() INFO | res: ' + str(res))
         self.socket.send(str(res))
         return True
         
