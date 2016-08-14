@@ -266,10 +266,13 @@ class ZeroPhClient(ZeroPh):
                 if is_number(commands[x][0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
-                    self.wait_and_call(int(commands[x][0]), commands[x][1])
+                    time.sleep(int(commands[x][0]))
+                    self.call(commands[x][1])
+                    #self.wait_and_call(int(commands[x][0]), commands[x][1])
                     continue
+                    
                 elif isinstance(commands[x][0], str):
-                    self.call(int(commands[x][0]), commands[x][1])
+                    self.call(commands[x][1])
         else:
             return self.handler.onError("ERROR in parse_commands: ", "commands was empty") 
         
