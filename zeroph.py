@@ -66,7 +66,19 @@ class ZeroPhServer(ZeroPh):
         """
         worker = ZeroPhWorker(self.verbose, self.processes)
         q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
-        return str(q1.get())
+        return self.res(str(q1.get()))
+        
+    def res(self, res):
+        """
+        Send the res result to the client 
+        
+        @params:{res} res results
+        
+        """
+        # server
+        self.socket.bind(self.host+':'+self.port)
+        self.socket.send(str(res))
+        #return True
         
     def run_server(self):
         """
@@ -82,8 +94,7 @@ class ZeroPhServer(ZeroPh):
         while True:
             msg = self.socket.recv()
             if isinstance(msg, str):
-                res = self.req(msg)
-                self.socket.send(str(res))
+                self.req(msg)
             else:
                 print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not a string ')
                 
@@ -137,12 +148,22 @@ class ZeroPhClient(ZeroPh):
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         self.socket.send(cmd)
-
-        msg = self.socket.recv()
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
-        res = self.handler.onReturn(msg, "")
-        return res
+        return True
+        
+    def res(self):
+        """
+        Send response from the server to the handler, then return it back
+        
+        """
+        # client 
+        self.socket.connect(self.host+':'+self.port)
+        while True:
+            msg = socket.recv()
+            if isinstance(msg, str):
+                if self.verbose:
+                    print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
+                res = self.handler.onReturn(msg, "")
+                return res
 
     def send(self, _type, _file, _cmd):
         """
