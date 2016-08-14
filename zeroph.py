@@ -216,8 +216,8 @@ class ZeroPhClient(ZeroPh):
         
         """
         time.sleep(seconds)
-        result = self.call(command)
-        return result
+        self.call(command)
+        return True
     
     def call_group(self, group):
         """
@@ -267,7 +267,6 @@ class ZeroPhClient(ZeroPh):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
                     self.wait_and_call(int(commands[x][0]), commands[x][1])
-
                     continue
                 elif isinstance(commands[x][0], str):
                     self.call(int(commands[x][0]), commands[x][1])
