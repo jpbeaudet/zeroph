@@ -39,30 +39,74 @@ class ZeroPh(object):
         self.host=_HOST
         self.port=_PORT
         self.handler = ZeroPhHandler(verbose)
-        
-    def cmd(self, cmd, verbose):
-        """
-        Run the actual command in thread
-        
-        @params: {str} cmd: the command to run
-        @rtype: {} return value
-        
-        """
+        self.server = ZeroPhServer(verbose)
+        self.client = ZeroPhClient(verbose)
 
-        if verbose:
-            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd)) 
-        query= cmd.split(",")
-        if verbose:
-            print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
-        process = Popen(query, stdout=PIPE, stderr=PIPE)
-        stdout, stderr = process.communicate()
-        if stderr:
-            print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
+    def init(self):
+        """
+        Start the base services described in config.ini in [Init] section
+        
+        If nothing then continue on listening. 
+        if key is a number then wait the number of seconds
+        @params: {file} config.ini
+        @rtype:{}
+        
+        """
+        if len(_INIT) >0:
+            self.client.parse_commands(_INIT)
         else:
-            if verbose:
-                print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
-            return stdout
-
+            pass
+                
+class ZeroPhServer(ZeroPh):    
+    def __init__(self, verbose):
+        self.verbose =verbose
+        # server
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.REP)
+        self.processes = int(Config.get("Default", "processes"))
+        
+    def req(self, msg):
+        """
+        Initiate the request and instantiate a new worker and start it
+        
+        @params: {msg} cmd msg for the worker
+        @rtype: {str} launch res with result
+        
+        """
+        worker = ZeroPhWorker(self.verbose, self.processes)
+        q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
+        return self.res(str(q1.get()))
+        
+    def res(self, res):
+        """
+        Send the res result to the client 
+        
+        @params:{res} res results
+        
+        """
+        # server
+        self.socket.bind(self.host+':'+self.port)
+        socket.send(str(res))
+        return True
+        
+    def run_server(self):
+        """
+        Start the server. Listen for cmd call
+        
+        """
+        # server
+        self.socket.bind(self.host+':'+self.port)
+        
+        if self.verbose:
+            print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
+        self.init()
+        while True:
+            msg = socket.recv()
+            if isinstance(msg, str):
+                self.req(msg)
+            else:
+                print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not a string ')
+                
     def enthread(self, target, args):
         q = Queue.Queue()
         def wrapper():
@@ -77,60 +121,50 @@ class ZeroPh(object):
             cleanup_stop_thread();
             sys.exit()
 
-    def init(self):
+class ZeroPhClient(ZeroPh):    
+    def __init__(self, verbose):
+        self.verbose =verbose
+        # client
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.REQ)
+        
+    def req(self, cmd):
         """
-        Start the base services described in config.ini in [Init] section
+        Send a cmd to the server 
         
-        If nothing then continue on listening. 
-        if key is a number then wait the number of seconds
-        @params: {file} config.ini
-        @rtype:{}
-        
+        @params: {str} cmd: cmd to send
+
         """
-        if len(_INIT) >0:
-            self.parse_commands(_INIT)
-        else:
-            pass
-        
-        
-    def run_server(self):
-        """
-        Start the server. Listen for cmd call
-        
-        """
-        # server
-        context = zmq.Context()
-        socket = context.socket(zmq.REP)
-        socket.bind(self.host+':'+self.port)
+        # client
+        self.socket.connect(self.host+':'+self.port)
         if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
-        self.init()
-        while True:
-            msg = socket.recv()
-            if isinstance(msg, str):
-                # Create two threads as follows
-                q1 = self.enthread(self.cmd, (msg, self.verbose))
-                socket.send(str(q1.get()))
-            else:
-                print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not converted to list ')
-                
+            print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
+        socket.send(cmd)
+        return True
+        
+    def res(self):
+        """
+        Send response from the server to the handler, then return it back
+        
+        """
+        # client 
+        self.socket.connect(self.host+':'+self.port)
+        msg = socket.recv()
+        if self.verbose:
+            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
+        res = self.handler.onReturn(msg, "")
+        return res
+
     def send(self, _type, _file, _cmd):
         """
-        Send a cmd to the server to be run in a thread
+        Send a cmd to the request method
         
         @params: {str} _type: type of comand ex: python, node, sh
         @params: {str} _file: filename to be called
         @params: {str} _cmd: the actual cmd and args that will be apllied to the cmd
-        @rtype: {} get the rsponse form the server which should be stdout of the called process
+        @rtype: {} get the response form the server which should be stdout of the called process
         
         """
-
-        # client
-        context = zmq.Context()
-        socket = context.socket(zmq.REQ)
-        socket.connect(self.host+':'+self.port)
-        
-        s =","
         cmd = s.join((_type,_file))
         for arg in _cmd:
             if arg != ",":
@@ -139,14 +173,9 @@ class ZeroPh(object):
                     print(str(timenow())+' ZeroPhServer() INFO | arg in _cmd: ' + str(arg)) 
 
                 cmd = cmd + arg.replace("[","").replace("]","") 
+                
+        self.req(cmd)
 
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
-        socket.send(cmd)
-        msg = socket.recv()
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
-            
     def call(self, method):
         """
         Send a cmd to the server to be run in a thread
@@ -158,9 +187,8 @@ class ZeroPh(object):
         
         """
         # client
-        context = zmq.Context()
-        socket = context.socket(zmq.REQ)
-        socket.connect(self.host+':'+self.port)
+        self.socket.connect(self.host+':'+self.port)
+        
         try:
             cmd= Config.get("Cmd", method)
         except:
@@ -168,12 +196,21 @@ class ZeroPh(object):
             cmd=str(timenow())+' ZeroPhServer() Warning | method does NOT exist in [Cmd] config.ini : ' + str(method)
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
-        socket.send(cmd)
-        msg = socket.recv()
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))     
-        return msg
+            
+        self.req(cmd)
+    
+    def wait_and_call(self, seconds, command):
+        """
+        wait number of seconds before lunching command
+        @params:{int} number of seconds
+        @params:{str} command
+        @rtype{func} call the command
         
+        """
+        time.sleep(seconds)
+        result = self.call(command)
+        return result
+    
     def call_group(self, group):
         """
         Add the possibility to manually (in in method group!) call a method group .
@@ -221,41 +258,69 @@ class ZeroPh(object):
                 if is_number(commands[x][0]):
                     if self.verbose:
                         print(str(timenow())+' ZeroPhParser() INFO | parse_commands(): '+str(commands[x][1])+': waiting ' + str(commands[x][0])+' seconds')
-                    result= self.do(self.wait_and_call, (int(commands[x][0]), commands[x][1]))
-                    result = self.handler.onReturn(result, commands[x][1])
+                    self.wait_and_call(int(commands[x][0]), commands[x][1])
+
                     continue
                 elif isinstance(commands[x][0], str):
-                    result= self.do(self.call, (int(commands[x][0]), commands[x][1]))
-                    result = self.handler.onReturn(result, commands[x][1])
-            return result        
+                    self.call(int(commands[x][0]), commands[x][1])
         else:
-            return self.onError("ERROR in parse_commands: ", "commands was empty")
-            
+            return self.handler.onError("ERROR in parse_commands: ", "commands was empty") 
         
-       
-    def do(self, target, args):
+class ZeroPhWorker(ZeroPh):    
+    def __init__(self, verbose, processes):
+        self.verbose =verbose
+        self.processes = processes
+
+    def start_jobs(self, msg, verbose):
         """
-        Start a command from parse command to avoid the loop to be stopped.
-        
-        @params: {func} target
-        @params: {tuple} args
-        
         """
-        q1 = self.enthread(target, args)
+        # Create a list of jobs and then iterate through
+        # the number of processes appending each process to
+        # the job list 
+        out_q = Queue.Queue()
+        jobs = []
+        result = ""
+        for i in range(0, processes):
+            out_list = list()
+            process = multiprocessing.Process(target=self.cmd, 
+                                            args=(msg, self.verbose, out_q))
+            jobs.append(process)
+            process.start()
+            result += out_q.get()
+
+        # Ensure all of the processes have finished
+        for j in jobs:
+            j.join()
         
-        
-    def wait_and_call(self, seconds, command):
-        """
-        wait number of seconds before lunching command
-        @params:{int} number of seconds
-        @params:{str} command
-        @rtype{func} call the command
-        
-        """
-        time.sleep(seconds)
-        result = self.call(command)
+        if self.verbose:
+            print(str(timenow())+' ZeroPhParser() INFO | Joblist List processing complete. | result: '+str(result))
         return result
+
+    def cmd(self, cmd, verbose):
+        """
+        Run the actual command in thread
         
+        @params: {str} cmd: the command to run
+        @rtype: {} return value
+        
+        """
+
+        if verbose:
+            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd)) 
+        query= cmd.split(",")
+        if verbose:
+            print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
+        process = Popen(query, stdout=PIPE, stderr=PIPE)
+        stdout, stderr = process.communicate()
+        if stderr:
+            print(str(timenow())+' ZeroPh() WARNING | cmd returned error: ' + str(stderr))
+        else:
+            if verbose:
+                print(str(timenow())+' ZeroPh() INFO | cmd returned stdout: ' + str(stdout))
+                
+            out_q.put(stdout)
+
+            
 class ZeroPhHandler(ZeroPh):    
     def __init__(self, verbose):
         self.verbose =verbose
@@ -333,13 +398,13 @@ def main():
     zeroph = ZeroPh(verbose)
     
     if args._type and args._file and args.cmd:
-        zeroph.send(args._type, args._file, args.cmd)
+        zeroph.client.send(args._type, args._file, args.cmd)
     elif args.start:
-        zeroph.run_server()
+        zeroph.server.run_server()
     elif args.name:
-        result = zeroph.call(args.name)
+        result = zeroph.client.call(args.name)
     elif args.group:
-        result= zeroph.call_group(args.group)
+        result= zeroph.client.call_group(args.group)
     else:
         print(str(timenow())+' ZeroPh() WARNING | missing argument, need a _type, _file and cmd, start the server with -s')
 

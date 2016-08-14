@@ -23,6 +23,7 @@ python zeroph.py -v -t python -f test.py -c ["-t" , "hello world"]
 [Default]
 Port: 5555
 Host: tcp://127.0.0.1
+processes: 3
 
 [Cmd]
 Test : python,test.py,-t,hello world

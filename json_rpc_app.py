@@ -86,11 +86,11 @@ class JsonRpcApp(object):
                 "Bad params %r: must be a boolean" % params)
                 
         try:
-            z = zeroph.ZeroPhServer(True)
+            z = zeroph.ZeroPh(True)
             if params:
-                result = z.parser.call_group(method)
+                result = z.client.call_group(method)
             else:
-                result = z.call(method)
+                result = z.client.call(method)
             #result = method(*params)
         except:
             text = traceback.format_exc()
