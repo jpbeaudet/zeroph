@@ -101,7 +101,7 @@ class ZeroPhServer(ZeroPh):
         
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
-        self.init()
+        ZeroPh.init()
         while True:
             msg = socket.recv()
             if isinstance(msg, str):
