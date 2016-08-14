@@ -50,7 +50,7 @@ class ZeroPh(object):
         """
 
         if verbose:
-            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd))
+            print(str(timenow())+' ZeroPh() INFO | Thread started for : ' + str(cmd)) 
         query= cmd.split(",")
         if verbose:
             print(str(timenow())+' ZeroPh) INFO | query : ' + str(query))
