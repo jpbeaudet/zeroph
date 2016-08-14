@@ -115,8 +115,6 @@ json-rpc_server.py smtplib:SMTP('localhost')
 #### Priority 
 
 - Make unittests
-- switch from multithread to multiprocess(thinking about using joblibs maybe)
-- makes jobs list into a queue self object with _id(pid) and trigger onReturn when a job are finished
 - add a unsupervised process launching (not listening to return value) option
 
 #### Secondary:
