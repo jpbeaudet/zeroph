@@ -148,22 +148,12 @@ class ZeroPhClient(ZeroPh):
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         self.socket.send(cmd)
-        return True
-        
-    def res(self):
-        """
-        Send response from the server to the handler, then return it back
-        
-        """
-        # client 
-        self.socket.connect(self.host+':'+self.port)
-        while True:
-            msg = socket.recv()
-            if isinstance(msg, str):
-                if self.verbose:
-                    print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
-                res = self.handler.onReturn(msg, "")
-                return res
+        msg = socket.recv()
+        if isinstance(msg, str):
+            if self.verbose:
+                print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
+            res = self.handler.onReturn(msg, "")
+            return res
 
     def send(self, _type, _file, _cmd):
         """
