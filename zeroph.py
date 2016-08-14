@@ -225,11 +225,11 @@ class ZeroPh(object):
                     result = self.handler.onReturn(result, commands[x][1])
                     continue
                 elif isinstance(commands[x][0], str):
-                    result= self.do(self.call, (int(commands[x][0]), commands[x][1]))
+                    result= self.do(self.call, (commands[x][1]))
                     result = self.handler.onReturn(result, commands[x][1])
             return result        
         else:
-            return self.onError("ERROR in parse_commands: ", "commands was empty")
+            return self.handler.onError("ERROR in parse_commands: ", "commands was empty")
             
         
        
