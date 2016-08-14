@@ -112,6 +112,8 @@ class ZeroPh(object):
                 # Create two threads as follows
                 worker = ZeroPhWorker(self.verbose)
                 q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
+                if self.verbose:
+                    print(str(timenow())+' ZeroPhServer() INFO | response: ' + str(q1.get()))
                 socket.send(str(q1.get()))
                 
             else:
