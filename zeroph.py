@@ -148,6 +148,7 @@ class ZeroPhClient(ZeroPh):
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         self.socket.send(cmd)
+        self.res()
         return True
         
     def res(self):
