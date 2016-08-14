@@ -287,7 +287,7 @@ class ZeroPhWorker(ZeroPh):
         out_q = Queue.Queue()
         jobs = []
         result = ""
-        for i in range(0, processes):
+        for i in range(0, self.processes):
             out_list = list()
             process = multiprocessing.Process(target=self.cmd, 
                                             args=(msg, self.verbose, out_q))
