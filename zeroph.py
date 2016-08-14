@@ -269,7 +269,7 @@ class ZeroPhClient(ZeroPh):
                     time.sleep(int(commands[x][0]))
                     self.call(commands[x][1])
                     #self.wait_and_call(int(commands[x][0]), commands[x][1])
-                    continue
+                    #continue
                     
                 elif isinstance(commands[x][0], str):
                     self.call(commands[x][1])
