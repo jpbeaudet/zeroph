@@ -110,7 +110,7 @@ class ZeroPh(object):
             msg = socket.recv()
             if isinstance(msg, str):
                 # Create two threads as follows
-                worker = ZeroPhWorker(verbose, self.processes)
+                worker = ZeroPhWorker(self.verbose, self.processes)
                 q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
                 socket.send(str(q1.get()))
             else:
