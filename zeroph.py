@@ -66,7 +66,8 @@ class ZeroPhServer(ZeroPh):
         """
         worker = ZeroPhWorker(self.verbose, self.processes)
         q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
-        return self.res(str(q1.get()))
+        self.res(str(q1.get()))
+        return True
         
     def res(self, res):
         """
@@ -78,7 +79,7 @@ class ZeroPhServer(ZeroPh):
         # server
         self.socket.bind(self.host+':'+self.port)
         self.socket.send(str(res))
-        #return True
+        return True
         
     def run_server(self):
         """
