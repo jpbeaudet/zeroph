@@ -65,7 +65,7 @@ class ZeroPh(object):
             return stdout
 
     def enthread(self, target, args):
-        q = Queue.Queue()
+        q = Queue()
         def wrapper():
             q.put(target(*args))
             q.task_done()
@@ -269,7 +269,7 @@ class ZeroPhWorker(ZeroPh):
         # Create a list of jobs and then iterate through
         # the number of processes appending each process to
         # the job list 
-        q = Queue.Queue()
+        q = Queue()
         p = Process(target=self.cmd, args=(msg, self.verbose, q))
         p.start()
         if self.verbose:
