@@ -146,7 +146,7 @@ class ZeroPhClient(ZeroPh):
         self.socket.connect(self.host+':'+self.port)
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
-        socket.send(cmd)
+        self.socket.send(cmd)
         return True
         
     def res(self):
