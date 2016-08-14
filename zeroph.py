@@ -45,6 +45,7 @@ class ZeroPh(object):
                 
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose, host, port):
+        
         self.verbose= verbose
         # server
         self.context= zmq.Context()
@@ -52,6 +53,7 @@ class ZeroPhServer(ZeroPh):
         self.processes= int(Config.get("Default", "processes"))
         self.host= host
         self.port= port
+        self.client = ZeroPhClient(self.verbose, self.host, self.port)
         
     def req(self, msg):
         """
