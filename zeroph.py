@@ -148,7 +148,6 @@ class ZeroPhClient(ZeroPh):
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | cmd sent to server: ' + str(cmd))
         self.socket.send(cmd)
-        self.res()
         return True
         
     def res(self):
@@ -156,10 +155,8 @@ class ZeroPhClient(ZeroPh):
         Send response from the server to the handler, then return it back
         
         """
-        # client
-        context= zmq.Context()
-        socket= context.socket(zmq.REQ)
-        socket.connect(self.host+':'+self.port)
+        # client 
+        self.socket.connect(self.host+':'+self.port)
         msg = socket.recv()
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
