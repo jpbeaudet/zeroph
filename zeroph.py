@@ -76,7 +76,7 @@ class ZeroPhServer(ZeroPh):
         """
         # server
         self.socket.bind(self.host+':'+self.port)
-        socket.send(str(res))
+        self.socket.send(str(res))
         return True
         
     def run_server(self):
@@ -91,7 +91,7 @@ class ZeroPhServer(ZeroPh):
             print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
         self.init()
         while True:
-            msg = socket.recv()
+            msg = self.socket.recv()
             if isinstance(msg, str):
                 self.req(msg)
             else:
