@@ -304,7 +304,7 @@ class ZeroPhWorker(ZeroPh):
             print(str(timenow())+' ZeroPhParser() INFO | Joblist List processing complete. | result: '+str(result))
         return result
 
-    def cmd(self, cmd, verbose):
+    def cmd(self, cmd, verbose, out_q):
         """
         Run the actual command in thread
         
