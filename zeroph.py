@@ -229,8 +229,8 @@ class ZeroPhClient(ZeroPh):
         """
         try:
             commands = self.parse_command_group(group)
-            result= self.parse_commands(commands)
-            return result
+            self.parse_commands(commands)
+            #return result
             
         except ValueError as (e):
             print(str(timenow())+' ZeroPhParser() WARNING | the group DOES NOT exists please try again: ' + str(msg)) 
@@ -274,7 +274,7 @@ class ZeroPhClient(ZeroPh):
                 elif isinstance(commands[x][0], str):
                     self.call(commands[x][1])
         else:
-            return self.handler.onError("ERROR in parse_commands: ", "commands was empty") 
+            self.handler.onError("ERROR in parse_commands: ", "commands was empty") 
         
 class ZeroPhWorker(ZeroPh):    
     def __init__(self, verbose, processes):
