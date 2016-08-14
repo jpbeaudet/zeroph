@@ -64,13 +64,9 @@ class ZeroPhServer(ZeroPh):
         @rtype: {str} launch res with result
         
         """
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | req: ' + str(msg))
         worker = ZeroPhWorker(self.verbose, self.processes)
         q1 = self.enthread(worker.start_jobs, (msg, self.verbose))
-        self.res(str(q1.get()))
-    
-        return True
+        return self.res(str(q1.get()))
         
     def res(self, res):
         """
@@ -81,8 +77,6 @@ class ZeroPhServer(ZeroPh):
         """
         # server
         self.socket.bind(self.host+':'+self.port)
-        if self.verbose:
-            print(str(timenow())+' ZeroPhServer() INFO | res: ' + str(res))
         self.socket.send(str(res))
         return True
         
@@ -100,8 +94,6 @@ class ZeroPhServer(ZeroPh):
         while True:
             msg = self.socket.recv()
             if isinstance(msg, str):
-                if self.verbose:
-                    print(str(timenow())+' ZeroPhServer() INFO | req from runserver: ' + str(msg))
                 self.req(msg)
             else:
                 print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not a string ')
@@ -164,15 +156,15 @@ class ZeroPhClient(ZeroPh):
         Send response from the server to the handler, then return it back
         
         """
-        # client 
-        self.socket.connect(self.host+':'+self.port)
-        while True:
-            msg = self.socket.recv()
-            if isinstance(msg, str):
-                if self.verbose:
-                    print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
-                res = self.handler.onReturn(msg, "")
-                return res
+        # client
+        context= zmq.Context()
+        socket= context.socket(zmq.REQ)
+        socket.connect(self.host+':'+self.port)
+        msg = socket.recv()
+        if self.verbose:
+            print(str(timenow())+' ZeroPhServer() INFO | server returned response: ' + str(msg))
+        res = self.handler.onReturn(msg, "")
+        return res
 
     def send(self, _type, _file, _cmd):
         """
