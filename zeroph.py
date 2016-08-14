@@ -38,9 +38,9 @@ class ZeroPh(object):
         self.verbose = verbose
         self.host=_HOST
         self.port=_PORT
-        self.handler = ZeroPhHandler(verbose)
-        self.server = ZeroPhServer(verbose)
-        self.client = ZeroPhClient(verbose)
+        self.handler = ZeroPhHandler(self.verbose)
+        self.server = ZeroPhServer(self.verbose, self.host, self.port)
+        self.client = ZeroPhClient(self.verbose, self.host, self.port)
 
     def init(self):
         """
@@ -58,12 +58,14 @@ class ZeroPh(object):
             pass
                 
 class ZeroPhServer(ZeroPh):    
-    def __init__(self, verbose):
-        self.verbose =verbose
+    def __init__(self, verbose, host, port):
+        self.verbose= verbose
         # server
-        self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.REP)
-        self.processes = int(Config.get("Default", "processes"))
+        self.context= zmq.Context()
+        self.socket= self.context.socket(zmq.REP)
+        self.processes= int(Config.get("Default", "processes"))
+        self.host= host
+        self.port= port
         
     def req(self, msg):
         """
@@ -122,11 +124,13 @@ class ZeroPhServer(ZeroPh):
             sys.exit()
 
 class ZeroPhClient(ZeroPh):    
-    def __init__(self, verbose):
-        self.verbose =verbose
+    def __init__(self, verbose, host, port):
+        self.verbose= verbose
         # client
-        self.context = zmq.Context()
-        self.socket = self.context.socket(zmq.REQ)
+        self.context= zmq.Context()
+        self.socket= self.context.socket(zmq.REQ)
+        self.host= host
+        self.port= port
         
     def req(self, cmd):
         """
