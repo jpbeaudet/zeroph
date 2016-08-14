@@ -42,20 +42,6 @@ class ZeroPh(object):
         self.server = ZeroPhServer(self.verbose, self.host, self.port)
         self.client = ZeroPhClient(self.verbose, self.host, self.port)
 
-    def init(self):
-        """
-        Start the base services described in config.ini in [Init] section
-        
-        If nothing then continue on listening. 
-        if key is a number then wait the number of seconds
-        @params: {file} config.ini
-        @rtype:{}
-        
-        """
-        if len(_INIT) >0:
-            self.client.parse_commands(_INIT)
-        else:
-            pass
                 
 class ZeroPhServer(ZeroPh):    
     def __init__(self, verbose, host, port):
@@ -101,7 +87,7 @@ class ZeroPhServer(ZeroPh):
         
         if self.verbose:
             print(str(timenow())+' ZeroPhServer() INFO | socket now listen on port: ' + str(self.port))
-        ZeroPh.init()
+        self.init()
         while True:
             msg = socket.recv()
             if isinstance(msg, str):
@@ -122,6 +108,21 @@ class ZeroPhServer(ZeroPh):
         except (KeyboardInterrupt, SystemExit):
             cleanup_stop_thread();
             sys.exit()
+            
+    def init(self):
+        """
+        Start the base services described in config.ini in [Init] section
+        
+        If nothing then continue on listening. 
+        if key is a number then wait the number of seconds
+        @params: {file} config.ini
+        @rtype:{}
+        
+        """
+        if len(_INIT) >0:
+            self.client.parse_commands(_INIT)
+        else:
+            pass
 
 class ZeroPhClient(ZeroPh):    
     def __init__(self, verbose, host, port):
