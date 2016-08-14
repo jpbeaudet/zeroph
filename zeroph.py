@@ -101,7 +101,7 @@ class ZeroPhServer(ZeroPh):
             msg = self.socket.recv()
             if isinstance(msg, str):
                 if self.verbose:
-                    print(str(timenow())+' ZeroPhServer() INFO | req from runserver: ' + str(msg)
+                    print(str(timenow())+' ZeroPhServer() INFO | req from runserver: ' + str(msg))
                 self.req(msg)
             else:
                 print(str(timenow())+' ZeroPhServer() WARNING | Error: cmd was not a string ')
